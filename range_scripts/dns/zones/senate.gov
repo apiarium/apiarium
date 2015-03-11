@@ -1,0 +1,26 @@
+; Zone File for senate.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1-139.akam.net.
+		IN	NS	ns1-201.akam.net.
+		IN	NS	use1.akam.net.
+		IN	NS	use4.akam.net.
+		IN	NS	usw2.akam.net.
+		IN	NS	use5.akam.net.
+		IN	MX	None senate.gov
+		IN	MX	None senate.gov
+		IN	MX	None senate.gov
+		IN	MX	None senate.gov
+None		IN	A	184.28.29.166
+None		IN	A	23.55.118.82
+None		IN	CNAME	www.senate.gov.edgekey.net.
+None		IN	TXT	"v=spf1 -all"
+; EOF

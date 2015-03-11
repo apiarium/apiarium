@@ -1,0 +1,23 @@
+; Zone File for ac.uk
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.ja.net.
+		IN	NS	ns2.ja.net.
+		IN	NS	ns4.ja.net.
+		IN	NS	ws-fra1.win-ip.dfn.de.
+		IN	NS	ns1.surfnet.nl.
+		IN	NS	auth03.ns.uu.net.
+		IN	NS	ns3.ja.net.
+		IN	MX	None ac.uk
+		IN	MX	None ac.uk
+None		IN	A	158.143.96.8
+None		IN	A	158.143.233.4
+; EOF

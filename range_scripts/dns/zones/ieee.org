@@ -1,0 +1,30 @@
+; Zone File for ieee.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns3.ieee.org.
+		IN	NS	ns1.ieee.org.
+		IN	NS	ns2.ieee.org.
+		IN	MX	None ns1.ieee.org
+		IN	MX	None ieee.org
+		IN	MX	None ieee.org
+		IN	MX	None ieee.org
+		IN	MX	None ieee.org
+		IN	MX	None ieee.org
+None		IN	A	140.98.193.64
+None		IN	A	23.207.58.195
+None		IN	A	140.98.193.141
+None		IN	A	208.99.166.238
+None		IN	A	140.98.193.128
+None		IN	A	63.84.220.182
+None		IN	CNAME	tal.ieee.org.
+None		IN	CNAME	www.ieee.org.edgekey.net.
+None		IN	TXT	"v=spf1 ip4:140.98.0.0/16 ip4:208.99.166.0/24 ip4:64.58.70.119 ip4:54.208.157.121 ip4:54.208.149.44 ip4:54.208.220.43 ip4:54.208.189.96 ip4:54.208.206.70 include:mktomail.com include:_spf.google.com ~all"
+; EOF

@@ -1,0 +1,888 @@
+<!--************************************************************************************************************************************************
+    * AUTHORS: Jonathan Miller, O-2; Nathaniel Hart, O-1; Katie Tiedemann, O-1
+    * CREATION DATE: 22 August 2013
+    * PAGE NAME: injects.html
+    * DESCRIPTION: 
+    *     Original Intent: Run injects page for Ephor C2 interface. Displays module types, web/range/client input options, and available targets. 
+    *     Includes a navigation bar header. This page is designed with the intent of being an interactive page, where users have can initiate
+    *    injects.
+*************************************************************************************************************************************************-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<title>Ephor - Injects</title>
+		<!-- Bootstrap -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="all">
+		<link href="style.css" rel="stylesheet" media="all">
+	</head>
+<body>
+	<div id="content">
+
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html" title="The ephors (from the Greek for 'on' or 'over' and the Greek word for 'to see'; i.e. 'one who oversees') were leaders of ancient Sparta and shared power with the Spartan kings.">Ephor C2</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Status</a></li>
+                    <li class="active"><a href="injects.html">Injects</a></li>
+                    <!-- <li><a href="interact.html">Interact</a></li> -->
+                </ul>
+                <div class="navbar-right">
+                    <p id="lastUpdate" class="navbar-text"></p>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Inject and Option Picker -->
+        <div class="col-md-3" id="popoverInject" data-content="Select an Inject" data-trigger="manual">
+            <div id="injectPicker"  class="list-group" >
+                <!-- Dynamically generated injects (from /modules) -->
+            </div>
+        </div> <!-- end inject picker -->
+
+        <!-- Option Picker -->
+        <div id="optionPicker" class="col-md-4" >
+            <!-- Dynamically generated options (from /modules) -->
+        </div><!-- end option picker -->
+
+        <!-- Range Picker -->
+        <div class="col-md-5" id="rangePickerHeader" data-content="Select one or more ranges" data-trigger="manual" data-placement="left">
+            <div id="rangePicker" class="list-group">
+                <!-- Dynamically generated ranges (from /json) -->
+            </div>
+            
+        </div> <!-- end range picker -->
+    </div> <!-- end content -->
+    
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/tooltip.js"></script> 
+    
+    <script>
+    // Hold selected targets for page refresh
+    var selectedHostnameSaver = Array();
+    var selectedHostnameSaverCopy = Array();
+    var selectedRangeSaver = Array();
+    var selectedRangeSaverCopy = Array();
+    var ISRANGEONLY = false;
+    var MALICIOUSIPIDX = 0;
+    var MALICIOUSIP = "0.0.0.0";
+    var maliciousIPs = Array();
+    var SAVETEMPLATE = false;
+
+/*
+    if(typeof console === 'undefined'){
+        // Make a logger
+        console = Object();
+        appendError = function(str){
+            throw new Error("Debug: "+str);
+        }
+        console.log = function(str){
+            var caller_line = (new Error).stack.split('\n')[4];
+            var patt = /([0-9]+)$/;
+            var line =  patt.exec(caller_line);
+            if(line != null){
+                setTimeout("appendError('Line "+line[0]+": "+str+"')",0.01);
+            } else {
+                setTimeout("appendError('"+caller_line+": "+str+"')",0.01);
+            }
+        }
+    }
+    if(typeof String.prototype.contains === 'undefined') {
+        String.prototype.contains = function(it){return this.indexOf(it) != -1;}
+    }
+*/
+
+    /** getModules()
+        * Load the modules table on screen left, load the web/range/options table on screen middle. Execute button created here, validates input and selections to ensure
+        * the proper information is supplied for the inject.
+    */
+    function getModules() {    
+        /** 
+            * Grab the modules
+        */
+        $.get('/modules', function(data){
+            //console.log('Requested modules:');
+            //console.log(data);
+
+            listGroup = '';
+            /** 
+                * Display each module type on the left side of the screen. Sets a link to display the web/range/client options windows in the center column
+            */
+            $.each(data, function(module_index, module) {
+                // Enumerate all the current injects
+                listGroupItem = '<a href="#' + module_index + '" id="list-group-item-id" class="list-group-item" data-toggle="tab">' +
+                    '<h4 class="list-group-item-heading">' + module[0] + '</h4>' +
+                    '<p class="list-group-item-text">' + module[1] + '</p>' + 
+                    '</a>';
+
+                listGroup += listGroupItem;
+            });
+
+            injectPicker = $('#injectPicker');
+            injectPicker.append(listGroup);
+
+            /** 
+                * Enumerate all web/range/client options for selected inject
+            */
+            $('[data-toggle="tab"]').click(function(e){            
+                $(e.currentTarget).addClass('active').siblings().removeClass('active'); //activated tab
+                //console.log(e);
+                
+                moduleID = '';
+                moduleID = $(this).attr('href');
+                moduleID = moduleID.replace('#', '');
+                moduleID = parseInt(moduleID,10);
+                
+                optionsGroup = '<form class="navbar-form" align="center">';
+
+                selectedModule = data[moduleID];
+                
+                // Only show the Targets panel if a target selection is necessary 
+                if (selectedModule[5][1] == true){
+                    ISRANGEONLY = true;
+                    $('#targetPicker').hide();
+                    $('#rangePicker').show();
+                }
+                else {
+                    ISRANGEONLY = false;
+                    $('#rangePicker').hide();
+                    $('#targetPicker').show();
+                }
+                // New options panels for web, range, and client zones
+                for (var i=2; i<=4; i++) {
+                    if (selectedModule[i][0] == null) {
+                        continue;
+                    }
+                    
+                    optionID = '';
+                    
+                    switch (i) {
+                        case 2:
+                            optionID = 'Web';
+                            break;
+                        case 3:
+                            optionID = 'Range';
+                            break;
+                        case 4:
+                            optionID = 'Client';
+                            break;
+                    }
+                    optionsPanel = '<div class="panel panel-default">' + '<div class="panel-heading">' + optionID + ' Options</div>';
+
+                    /** 
+                    * Panel body contains all options for that zone
+                    */
+                    $.each(selectedModule[i], function(option_index, option){
+                        console.log(option);
+                        if( option instanceof Array ){
+                            // INT, STRING, TEXTAREA, DROPDOWN, UPLOAD, WEBC2_IP, WEBC2_PORT, RANGEC2_MALICIOUS_IP, RANGEC2_MALICIOUS_PORT = range(9)
+                            if (option[0] != 7){
+                                optionsPanel += '<div class="panel-body">' +
+                                    '<p class="pull-left">' + option[1] + '</p>';
+                            }
+                            else{
+                                optionsPanel += '<div class="panel-body">' +
+                                    '<p class="pull-left">Malicious IP Selection</p>';
+                            }
+                            switch(option[0]){
+                                case 0: //int
+                                    optionsPanel += '<input type="number" autopost="false" id="example' + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    break;
+                                case 1: // string
+                                    optionsPanel += '<input type="text" id="example' + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    break;
+                                case 2: // textarea
+                                    optionsPanel += '<textarea id="example' + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    break;
+                                case 3: // dropdown
+                                    optionsPanel += '<select id="example'+option_index+'" class="form-control '+optionID+'Argument">';
+                                    $.each(option[2], function(select_index, select_option){
+                                        optionsPanel += '<option value="'+select_option+'">'+select_option+'</option>';
+                                    });
+                                    optionsPanel += '</select>';
+                                    break;
+                                case 4: // upload
+                                    optionsPanel += '<input type="file" id="example' + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    break;
+                                case 7: // Malicious IP
+                                    // Create Malicious IP Dropdown; populates dynamically when range is selected; only supports one malicious ip
+                                    //if (ISRANGEONLY == false) {
+                                        console.log("malicious ip creation");
+                                        //optionsPanel += '<div class="panel-body" >' +
+                                        //    '<p class="pull-left">' + option[1] + '</p>';
+                                        optionsPanel += '<select id="example'+option_index+'" class="form-control '+ optionID+'Argument" onchange="malIpSelected(this.value)">';
+                                        // njh
+                                        $.each(maliciousIPs, function(ip_index, ip_val){
+                                            if(ip_index == 0) {
+                                                malIpSelected(ip_val);
+                                            }
+                                            console.log("ip_val="+ip_val);
+                                            if(ip_val.contains('194.17.168.') || ip_val.contains('213.199.235.')){
+                                                optionsPanel += '<option value="'+ip_val+'">'+ip_val+' (PC use only)</option>';
+                                            } else {
+                                                optionsPanel += '<option value="'+ip_val+'">'+ip_val+'</option>';
+                                            } 
+
+                                        });
+                                        optionsPanel += '</select>';
+                                    //} else {
+                                    //    optionsPanel += '<div lass="panel-body" style="display:none">' ;
+                                    //    optionsPanel += '<input id="MaliciousIpInput" type="text" value="tobereplaced" id="example' 
+                                    //                 + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    //}    
+                                    break;
+                                default:
+                                    console.log("IM A NUMBER2!");
+                                    optionsPanel += '<input type="number" id="example' + option_index  + '" class="form-control '+ optionID +'Argument"/>' ;
+                                    break; 
+                            }
+                            optionsPanel += '</div>'; //end of panel body
+                            
+                        } else {
+                            optionsPanel += '<div class="panel-body">' +
+                                '<p class="pull-left">' + option + '</p>' +
+                                '<input type="text" id="example' + option_index  + '" class="form-control '+optionID+'Argument"/>';//+ optionID +'Argument"/>' ;
+                            optionsPanel += '</div>'; //end of panel body
+                        }
+                    });
+                   
+                    showTargets();
+                    optionsPanel += '</div>'; // end of panel
+                    optionsGroup += optionsPanel;
+                }
+                optionsPicker = $('#optionPicker');
+                optionsGroup += '<button id="executeButton" type="button" class="btn btn-danger" style="padding-left:100px;padding-right:100px;" >Execute</button></form>';
+
+                // Template Options
+                optionsGroup += '<div class="navbar-form" style="padding-top:20px;align:center;"><div class="panel panel-default" style="padding:0px;background-color:#f5f5f5;">'+
+                                '<div class="panel-heading" style="text-align:center;">Template Options</div><div class="panel-body"><table style="width:100%;"><tr><td>'+
+                                '<select id="loadTemplate" class="form-control loadTemplate">'+
+                                '<option value="Select Template">Select Template</option>';
+                $.each(selectedModule[6], function(temp_idx, templateName){
+                    moduleName=selectedModule[0].replace(/ /g, '_');
+                    optionsGroup += '<option value="template/'+moduleName+'/'+templateName+'">'+templateName+'</option>';
+                });
+                optionsGroup += '</select></td><td style="align:right;"><button id="loadTemplateBtn" type="button" class="btn btn-default">Load</button></td></tr>'+
+                                '<tr><td><input type="text" id="saveTemplate" class="form-control saveTemplate"></td><td style="align:right;">'+
+                                '<button id="saveTemplateBtn" type="button" class="btn btn-default">Save</button></td></tr></div></div></div>' ;
+
+
+
+                optionsPicker.hide().html(optionsGroup).fadeIn();
+                rangeSelected();
+		$("#saveTemplateBtn").click(function(e){
+		    //failure("Sorry!","Save Template not yet implemented");
+		    SAVETEMPLATE = true;
+		    $("#executeButton").click();
+		    return;
+		});
+		
+		
+                /** 
+                    * First test and then submit the selected/entered data to sart the inject on the selected target/targets
+                */
+                $("#executeButton").click(function(e){
+                    // Get the selected module
+                    selectedModule = $('.list-group-item.active')[0];
+                    if(selectedModule == undefined){
+                        failure("Error!","Please select an inject on the left-hand side.")
+                        return;
+                    }
+                    moduleName = selectedModule.childNodes[0].innerHTML;
+                    if(moduleName == undefined || moduleName == ""){
+                        failure("Error!","Please select an inject on the left-hand side.")
+                        return;
+                    }
+
+                    // Create an array of targets
+                    targets = Array();
+                    if (ISRANGEONLY == false) {
+                        selectionArray = 'input.selectedWS:checkbox:checked';
+                    } else {
+                        selectionArray = 'input.selectedRange:checkbox:checked';
+                    }
+                    $(selectionArray).each(function(index, item){
+                        // "Hostname (i.p.ad.dr)"
+                        hostAtIp = item.parentNode.nextSibling.childNodes[0].data;
+                        // In the form of "tr.rowClass RANGENAME"
+                        range = item.parentNode.parentNode.className.split(' ')[2];
+                        // get the IP from the "hostname (ip)" string
+                        if(ISRANGEONLY){
+                            target = MALICIOUSIP;
+                        } else {
+                            target = hostAtIp.split('(')[1].replace('(','').replace(')','');
+                        }
+                        target = range + '.' + target;
+                        targets.push(target);
+                    });
+                    
+
+
+                    // Get the arguments
+                    rangeOptions = $('.RangeArgument');
+                    clientOptions = $('.ClientArgument');
+                    webOptions = $('.WebArgument');
+
+                    rangeArguments = Array();
+                    webArguments = Array();
+                    clientArguments = Array();
+                    
+                    quit = false;
+
+                    fileUploads = 0;
+                    fileUploadsCompleted = 0;
+                    
+                    /** 
+                        * Check web options, if null, report error
+                    */
+                    $.each(webOptions, function(index, item){
+                        if(item.value == ""){
+                            failure("Error!", "Please check your Web Options and try again.");
+                            quit = true;
+                        }
+                        if(item.type == "text"){
+                           // Dont allow any IPs beginning in 192
+                           if ((item.value.charAt(0) == 1) && (item.value.charAt(1) == 9) &&
+                               (item.value.charAt(2) == 2)) {
+                               failure("Error!", "Target only player-space IPs, (No 192 addresses)");
+                               quit = true;
+                           }
+                        }
+                        if(item.type == "file"){
+                            // upload file
+                            console.log("found file");
+                            fileUploads += 1;
+                            reader = new FileReader();
+                            file = item.files[0];
+                            reader.onload = function(e) {
+                                console.log(file.name, e.target.result.replace("data:",""));
+                                webArguments.push(e.target.result.replace('data:',''));
+                                fileUploadsCompleted += 1;
+                            }
+                            reader.onerror = function(stuff){
+                                console.log("Error uploading file:", stuff.getMessage());
+                                quit = True;
+                            }
+                            reader.readAsDataURL(file);
+                        }
+                        else {
+                 //           webArguments.push(item.value);
+                        }
+                    });
+                    
+                    /** 
+                        * Check range options, if null, report error
+                    */
+                    $.each(rangeOptions, function(index, item){
+                        if(item.value == ""){                        
+                            failure("Error!", "Please check your Range Options and try again.");
+                            quit = true;
+                        }
+                        if(item.type == "text"){
+                           // Dont allow any IPs beginning in 192
+                           if ((item.value.charAt(0) == 1) && (item.value.charAt(1) == 9) &&
+                               (item.value.charAt(2) == 2)) {
+                               failure("Error!", "Target only player-space IPs, (No 192 addresses)");
+                               quit = true;
+                           }
+                        }
+                        if(item.type == "file"){
+                            // upload file
+                            console.log("found file");
+                            fileUploads += 1;
+                            reader = new FileReader();
+                            file = item.files[0];
+                            reader.onload = function(e) {
+                                console.log(file.name, e.target.result.replace("data:",""));
+                                rangeArguments.push(e.target.result.replace('data:',''));
+                                fileUploadsCompleted += 1;
+                            }
+                            reader.onerror = function(stuff){
+                                console.log("Error uploading file:", stuff.getMessage());
+                                quit = True;
+                            }
+                            reader.readAsDataURL(file);
+                        }
+                        else {
+                            rangeArguments.push(item.value);
+                        }
+                    });
+                    
+                    /** 
+                        * Check client options, if null, report error
+                    */
+                    $.each(clientOptions, function(index, item){
+                        if(item.value == ""){
+                            failure("Error!", "Please check your Client Options and try again.");
+                            quit = true;
+                        }
+                        if(item.type == "text"){
+                           // Dont allow any IPs beginning in 192
+                           if ((item.value.charAt(0) == 1) && (item.value.charAt(1) == 9) &&
+                               (item.value.charAt(2) == 2)) {
+                               failure("Error!", "Target only player-space IPs, (No 192 addresses)");
+                               quit = true;
+                           }
+                        }
+                        if(item.type == "file"){
+                            // upload file
+                            console.log("found file");
+                            fileUploads += 1;
+                            reader = new FileReader();
+                            file = item.files[0];
+                            reader.onload = function(e) {
+                                console.log(file.name, e.target.result.replace("data:",""));
+                                clientArguments.push(e.target.result.replace('data:',''));
+                                fileUploadsCompleted += 1;
+                            }
+                            reader.onerror = function(stuff){
+                                console.log("Error uploading file:", stuff.getMessage());
+                                quit = True;
+                            }
+                            reader.readAsDataURL(file);
+                        }
+                        else {
+                            clientArguments.push(item.value);
+                        }
+                    });
+
+                    if(targets.length == 0){
+                        failure("Error!", "Please select your targets.");
+                        return;
+                    }
+                    
+                    if(quit){
+                        return;
+                    }
+                    function sendExecutePost(){
+                        // We have everything!
+                        if(SAVETEMPLATE==true){
+			   //failure("In Progress","SAVETEMPLATE==true in sendExecutePost");
+			   if($('#saveTemplate').val() == ""){
+				failure("Error!", "Please enter a filename for the Template");
+			   }else{
+				//success("Saving Template", $('#saveTemplate').val());
+				args = [moduleName, webArguments, rangeArguments, clientArguments];
+				$.post('/', { action: 'inject', option: 'saveTemplate', saveName: $('#saveTemplate').val(), target: target, args: JSON.stringify(args) }, function(data, textStatus, jqXHR){
+				    win = "Saving Template";
+                                    success(win,data);
+                                });
+
+			    }
+			   SAVETEMPLATE = false;
+			}
+			else if(fileUploads == fileUploadsCompleted){
+                            $.each(targets, function(index, target){
+                                args = [moduleName, webArguments, rangeArguments, clientArguments];
+                                $.post('/', { action: 'inject', option: 'start', target: target, args: JSON.stringify(args) }, function(data, textStatus, jqXHR){
+                                    win = "Module started on "+target;
+                                    success(win,data);
+                                });
+                            });
+                        } else {
+                            setTimeout(sendExecutePost, 2000);
+                        }
+                    }
+
+                    sendExecutePost();
+                });
+
+                $("#loadTemplateBtn").click(function(e) {
+                    selectedVal = $('#loadTemplate').val();
+                    $.get(selectedVal, function(data){
+                        for (var i=1; i<=3; i++) {
+                            optionID='';
+                            switch (i) {
+                                case 1:
+                                    optionID = 'Web';
+                                    break;
+                                case 2:
+                                    optionID = 'Range';
+                                    break;
+                                case 3:
+                                    optionID = 'Client';
+                                    break;
+                            }
+                            if (data[i][0] == null){ continue;}
+                            console.log('data[i]='+data[i]);
+                            $.each(data[i], function(option_idx, option){
+                                inputBox = '#example'+option_idx;
+                                console.log(option_idx);
+                                $(inputBox)[0].value = option;
+                            });
+                        }
+                    });
+                });
+
+                // Change focus to first textbox shown
+                $("#example0").focus();
+            });
+
+            //Default to NMAP Inject display on page load
+            try{
+                $('[data-toggle="tab"]')[0].click();
+            } catch(e) {
+                // stop logging this error, FF
+            }
+
+            // Hide all incomplete ones
+            //$.each($('.list-group-item'), function(index, item){ if($(item).children()[1].innerHTML.substr(0,12) == "(INCOMPLETE)"){$(item).hide();} });
+        });
+     }
+     /** rangeSelected(range)*/
+     function rangeSelected() {
+         $('#MaliciousIpSelection').empty();
+         if ( $('input.selectedWS:checkbox:checked').length == 0) {
+             $('#MaliciousIpSelection').append('<option value="1">Select a Target</option>');
+         }
+         else if ( $('input.selectedWS:checkbox:checked').length == 1 ) {
+             range = $('input.selectedWS:checkbox:checked')[0].parentNode.parentNode.className.split(' ')[2];
+             $.get('/json', function(data) {
+                 $.each(data, function(range_index, rangeC2) {
+                     if (rangeC2.rangeName == range) {
+                         $('#MaliciousIpSelection').empty();
+                         $.each(rangeC2.c2IPPool, function(ip_idx, c2IPPool) {
+                             if (c2IPPool == MALICIOUSIP) {
+                                 $('#MaliciousIpSelection').append('<option selected="true" value="'+c2IPPool+'">'+c2IPPool+'</option>');
+                             } else {
+                                 $('#MaliciousIpSelection').append('<option value="'+c2IPPool+'">'+c2IPPool+'</option>');
+                             }     
+                         });
+                     }
+                 });
+             });
+         }
+         else {
+             $('#MaliciousIpSelection').append('<option>Only one target supported at a time</option>');
+         }
+    }  
+
+    /* Malicious IP selected */  
+    function malIpSelected(IP) {
+        MALICIOUSIPIDX = maliciousIPs.indexOf(IP);
+        MALICIOUSIP = IP;
+    }      
+
+    /* A template is selected */
+    //function templateLoaded(templateName) {
+        //$.get('/fsdfa', function(data) {
+    //} 
+
+    /** checkAndHighlight(checkbox)
+        * Called when a user clicks on an item in the targets table. If the item is already checked, uncheck it. If the item isn't check, check it
+        * Save checked and unchecked state in an array, for use on page refresh
+        * @param checkbox - hidden checkbox item associted with a clicked hostname
+    */
+    function checkAndHighlight(checkbox) {
+        if ($(checkbox).prop("checked")) {
+            $(checkbox).prop("checked", false);
+            $(checkbox.parentNode.parentNode).removeClass("activated");
+            if (ISRANGEONLY == false) {
+                var index = selectedHostnameSaver.indexOf($(checkbox).attr("data-id"));
+                if (index > -1) {
+                   selectedHostnameSaver.splice(index, 1);
+                }
+            } else {
+                var index = selectedRangeSaver.indexOf($(checkbox).attr("data-id"));
+                if (index > -1) {
+                   selectedRangeSaver.splice(index, 1);
+                }
+            }
+        }
+        else {
+            $(checkbox).prop("checked", true);
+            $(checkbox.parentNode.parentNode).addClass("activated");
+            if (ISRANGEONLY == false) {
+                selectedHostnameSaver.push($(checkbox).attr("data-id"));
+            } else {
+                selectedRangeSaver.push($(checkbox).attr("data-id"));
+            } 
+        }
+        rangeSelected();
+    }
+    
+    /** reCheckAndHighlight(checkbox)
+        * Called when the showTargets() is refreshed. All items start unchecked. Does not manipulate the array.
+        * @param checkbox - hidden checkbox item associted with a clicked hostname
+    */
+    function reCheckAndHighlight(checkbox) {
+        //console.log("checkAndHighlight ", checkbox);
+        if ($(checkbox).prop("checked")) {
+            $(checkbox).prop("checked", false);
+            $(checkbox.parentNode.parentNode).removeClass("activated");
+            var index = selectedHostnameSaver.indexOf($(checkbox).attr("data-id"));
+        }
+        else {
+            //Shoulden't ever happen
+            $(checkbox).prop("checked", true);
+            //console.dir(checkbox);
+            $(checkbox.parentNode.parentNode).addClass("activated");
+        }
+        rangeSelected();
+    }
+    
+    /** showTargets()
+        * Display all of the targets grouped by range. Initiate all of the necessary click listeners on the onjects created.
+    */
+    function showTargets(){
+        // Grab the json data from the server; populate the view
+        $.get('/json', function(data) {
+            $("#rangePicker").empty();
+            $("#targetPicker").empty();
+            
+            //console.log('Available ranges:');
+            //console.log(data);
+            
+            // Set the time of the last update, upper right hand corner
+            $('#lastUpdate').text("Last update: "+getTimeString());
+
+            // Put table in a panel
+            targetPanel = '<div id="targetPanel" class="panel panel-default">'; 
+            targetPanel += '<div class="panel-heading"><table class="targetPanelTable" style="width:100%"><tr>' +
+                            '<td><h2 class="panel-title">Targets</h2></td>' +
+                        '<td align="right"><div class="btn-group"><button id="clearButton1" type="button" class="btn btn-default">Uncheck All</button>' +
+                        '<button id="selectAllWsButton" type="button" class="btn btn-default">Select All</button></div></td></tr></table></div>';
+    
+            // Table layout of ranges
+            targetTable = '<table class="table table-condensed table-hover table-bordered">' +
+                '<tr class=tableHead"><th>Range</th><th class="hiddenCheckboxColumn">Selected</th><th>Hostname</th></tr>';                ////////added th hidden
+
+            // Put table in a Range
+            rangePanel = '<div id="rangePanel" class="panel panel-default">'; 
+            rangePanel += '<div class="panel-heading"><table class="targetPanelTable" style="width:100%"><tr>' +
+                            '<td><h2 class="panel-title">Targets</h2></td>' +
+                            //'<td align="center"><button id="rollIpButton" type="button" class="btn btn-default"  >Roll IPs</button></td>' +
+                            '<td align="right"><div class="btn-group">' +
+                            '<button id="clearButton2" type="button" class="btn btn-default">Uncheck All</button>' +
+                        '<button id="selectAllRangeButton" type="button" class="btn btn-default">Select All</button></div></td></tr></table></div>';
+    
+            // Table layout of ranges
+            rangeTable = '<table class="table table-condensed table-hover table-bordered">' +
+                '<tr class=tableHead"><th class="hiddenCheckboxColumn">Selected</th><th>Range</th></tr>';                ////////added th hidden
+            /** 
+             * Display each range
+            */
+            rangeSelect = $('#RangeSelection').empty();
+            rangeSelect.append('<option class="superCoolOptions" value="Select Range">Select Range</option>');
+            $.each(data, function(range_index, rangeC2) {
+                /*************************
+                 ** Display each client **
+                 *************************/
+                if (rangeC2.clients.length != 0) {
+                    // Determine the number of clients per range (temp ragne clients are removed)
+                    client_length = rangeC2.clients.length;
+                    $.each(rangeC2.clients, function(client_index, client) {
+                        if (client.state == 5){
+                            client_length -= 1;
+                        }
+                    });
+                    // Add each client 
+                    newRow = '<tr class="rangeRow clickRow"><td rowspan="' + (client_length + 1) + '">' + rangeC2.rangeName + '</td>';
+                    $.each(rangeC2.clients, function(client_index, client) {
+                        if (client.state != 5) {
+                            newRow += '<tr class="clientRow clickRow ' + rangeC2.rangeName + '">';                
+                            newRow += '<td class="hiddenCheckboxColumn"><input type="checkbox" class="selectedWS" data-id="'
+                                   + client.hostname + "-&-" + rangeC2.rangeName + '"</td>';
+                            newRow += '<td>' + client.hostname + ' (' + client.ip + ')</td></tr>';
+                        }
+                    });
+                } else {
+                    newRow = '<tr class="rangeRow clickRow"><td rowspan="1">' + rangeC2.rangeName + '</td><td>No Clients Detected</td>';
+                }    
+                newRow += '</tr>';
+                targetTable += newRow;
+             
+                /*
+                 *  Display each range (omit client list)
+                 */ 
+                newRow2 = '<tr class="rangeRow clickRow">';
+                newRow2 += '<tr class="clientRow clickRow ' + rangeC2.rangeName + '">';                
+                newRow2 += '<td class="hiddenCheckboxColumn"><input type="checkbox" class="selectedRange" data-id="host-$-'+rangeC2.rangeName+'"</td>';
+                newRow2 += '<td>' + rangeC2.rangeName + /* ' (' + rangeC2.c2IPPool[(MALICIOUSIPIDX%rangeC2.c2IPPool.length)] + */ '</td></tr>';
+                newRow2 += '</tr>';
+
+                // njh
+                maliciousIPs = rangeC2.c2IPPool;                
+
+                rangeTable += newRow2;
+            });
+            rangeSelect.append('</select>');
+            
+            targetTable += '</table>';
+            rangeTable += '</table>'; 
+            targetPanel += targetTable;
+            rangePanel += rangeTable;
+            targetPanel += '</div>';
+            rangePanel += '</div>';           
+ 
+            targetSection = $("#targetPicker");
+            targetSection.append(targetPanel); 
+            rangeSelection = $("#rangePicker");
+            rangeSelection.append(rangePanel); 
+            
+            // Re-select ranges after refresh
+            var element;
+            selectedHostnameSaverCopy = selectedHostnameSaver.slice(0); // Duplicate array, because later shift takes element out of the array
+            while (selectedHostnameSaverCopy.length > 0) {
+                element = selectedHostnameSaverCopy.shift();                
+                reCheckAndHighlight($('*[data-id="' + element + '"]')[0]);
+            }
+            selectedRangeSaverCopy = selectedRangeSaver.slice(0); // Duplicate array, because later shift takes element out of the array
+            while (selectedRangeSaverCopy.length > 0) {
+                element = selectedRangeSaverCopy.shift();                
+                reCheckAndHighlight($('*[data-id="' + element + '"]')[0]);
+            }
+        
+            /** 
+             * If user clicks anywhere in the row, check the checkbox
+            */
+            $(".clientRow").click(function(e) {
+                checkbox = e.target.parentNode.childNodes[0].childNodes[0];
+                checkAndHighlight(checkbox);
+            });
+
+            /** 
+             * If user clicks anywhere in the multi-column range cell, check the related checkboxes
+            */
+            $(".rangeRow").click(function(e) {
+                rangeName = e.target.innerText.replace(/ /g, '_');
+                $('.' + rangeName).each(function(row_index, row) {
+                    checkbox = row.childNodes[0].childNodes[0];
+                    checkAndHighlight(checkbox);
+                });
+            });
+            
+            /** 
+             * Clear all selected targets
+            */
+            $("#clearButton1, #clearButton2").click(function(e) {
+            //console.log(e);
+                $("input:checkbox").prop("checked", false);
+                $("input:checkbox").parent().parent().removeClass("activated");
+                selectedHostnameSaver=[];
+                selectedRangeSaver=[];
+            });
+            
+            /** 
+             * Select all targets
+            */
+            $("#selectAllWsButton").click(function(e) {
+                $("input:checkbox").prop("checked", true);
+                $("input:checkbox").parent().parent().addClass("activated");
+                selectedHostnameSaver.length = 0;
+console.log("checkin stuff (range only) ...");
+                $.each($("input.selectedWS:checkbox"), function(index, data){
+                    selectedHostnameSaver.push($(data).data('id'));
+                });
+            });
+
+            /** 
+                * Select all Ranges
+            */
+            $("#selectAllRangeButton").click(function(e) {
+                $("input:checkbox").prop("checked", true);
+                $("input:checkbox").parent().parent().addClass("activated");
+                selectedHostnameSaver.length = 0;
+console.log("checkin stuff (range only) ...");
+                $.each($("input.selectedRange:checkbox"), function(index, data){
+                    selectedRangeSaver.push($(data).data('id'));
+                });
+            });
+
+            /*
+                * Roll IP button clicked
+            */
+            $("#rollIpButton").click(function(e) {
+                MALICIOUSIPIDX += 1;
+                showTargets();
+            });
+        });
+    }
+
+    /** 
+        * Called when there is any type of error with information input
+    */
+    function failure(title, content){
+        message = '<div class="alert alert-danger">'+
+                       '<a class="close" data-dismiss="alert">x</a>'+
+                       '<h4 class="alert-heading">' + title + '</h4>'+
+                       content+
+                  '</div>';
+        $(message).hide().prependTo("#optionPicker").fadeIn();
+    }
+
+    /** 
+        * Called when the information is input successfully
+    */
+    function success(title, content){
+        message = '<div class="alert alert-success">'+
+                       '<a class="close" data-dismiss="alert">x</a>'+
+                       '<h4 class="alert-heading">'+title+'</h4>'+
+                       content+
+                  '</div>';
+        $(message).hide().prependTo("#optionPicker").fadeIn();
+    }
+    
+    
+    /** 
+        * Get the time for keeping track of last update
+    */
+    function getTimeString(){
+        var retStr = "";
+        var d = new Date();
+        var h = d.getHours().toString();
+        if(h.length == 1){
+            h = '0'+h;
+        }
+        retStr += h+':';
+        var m = d.getMinutes().toString();
+        if(m.length == 1){
+            m = '0'+m;
+        }
+        retStr += m+':';
+        var s = d.getSeconds().toString();
+        if(s.length == 1){
+            s = '0'+s;
+        }
+        retStr += s;
+        return retStr;
+    }  
+    
+    /** 
+        * Refresh ths dashboard every 5 seconds
+    */
+    setInterval(function(){
+        if($('.modal.fade.in').length === 0 && $('.popover.fade.bottom.in').length == 0){
+            //console.log("Refreshing content")
+            showTargets();
+        }
+    
+    }, 5000); 
+  
+    function enterHandler(){
+        try{
+            if (event.keycode || event.which == 13) {
+               $("#executeButton").click();
+               return false;
+            }
+        } catch(e) {
+        }
+    }
+    document.onkeypress = enterHandler;
+ 
+    /** 
+        * Code that runs when page is first loaded. 
+    */
+    $(document).ready(getModules);
+    $(document).ready(showTargets);
+
+</script>
+</body>
+</html>
+

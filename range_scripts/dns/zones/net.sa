@@ -1,0 +1,21 @@
+; Zone File for net.sa
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	sa.cctld.authdns.ripe.net.
+		IN	NS	rip.psg.com.
+		IN	NS	ns1.isu.net.sa.
+		IN	NS	sa-ns.anycast.pch.net.
+		IN	NS	ns1.nic.net.sa.
+		IN	NS	ns2.nic.net.sa.
+None		IN	A	86.111.196.9
+None		IN	A	86.111.192.9
+None		IN	A	212.26.18.3
+; EOF

@@ -1,0 +1,20 @@
+; Zone File for indomco.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	indom10.indomco.com.
+		IN	NS	indom80.indomco.hk.
+		IN	NS	indom130.indomco.org.
+		IN	NS	indom20.indomco.net.
+		IN	NS	indom30.indomco.fr.
+		IN	MX	None indomco.org
+None		IN	A	209.235.192.171
+None		IN	A	217.174.202.146
+; EOF

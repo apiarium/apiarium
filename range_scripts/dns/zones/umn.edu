@@ -1,0 +1,25 @@
+; Zone File for umn.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-auth-remote-1.umn.edu.
+		IN	NS	ns-auth-1.umn.edu.
+		IN	MX	None umn.edu
+		IN	MX	None umn.edu
+		IN	MX	None umn.edu
+		IN	MX	None umn.edu
+		IN	MX	None umn.edu
+None		IN	A	140.142.16.240
+None		IN	A	128.101.101.1
+None		IN	A	134.84.119.7
+None		IN	A	134.84.119.207
+None		IN	A	134.84.119.107
+None		IN	TXT	"google-site-verification=q7NDFqc4nQ-gH7wS0jSisjYWAhwzgTKLKPuFzvG84M8"
+; EOF

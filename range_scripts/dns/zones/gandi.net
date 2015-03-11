@@ -1,0 +1,26 @@
+; Zone File for gandi.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	dns3.gandi.net.
+		IN	NS	dns0.gandi.net.
+		IN	NS	dns1.gandi.net.
+		IN	NS	dns2.gandi.net.
+		IN	MX	None gandi.net
+		IN	MX	None gandi.net
+None		IN	A	217.70.177.40
+None		IN	A	217.70.184.1
+None		IN	A	217.70.179.36
+None		IN	A	217.70.177.39
+None		IN	A	217.70.177.45
+None		IN	A	217.70.183.211
+None		IN	TXT	"google-site-verification: OyQ-vUKOBlZ2onEvCpyG7UGmQC1_tahPOUSNqCWYruo"
+None		IN	TXT	"v=spf1 ip4:217.70.176.0/21 ip6:2001:4b98:c::/48 ptr ?all"
+; EOF

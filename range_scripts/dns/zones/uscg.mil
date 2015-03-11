@@ -1,0 +1,32 @@
+; Zone File for uscg.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns5.uscg.mil.
+		IN	NS	ns4.uscg.mil.
+		IN	NS	ns1.uscg.mil.
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+		IN	MX	None uscg.mil
+None		IN	A	23.34.23.179
+None		IN	A	152.121.184.21
+None		IN	A	199.211.218.6
+None		IN	A	199.211.216.7
+None		IN	A	199.211.215.69
+None		IN	CNAME	www.uscg.mil.edgekey.net.
+None		IN	TXT	"v=spf1 ip4:152.121.28.33 ip4:152.121.27.33 ip4:152.121.49.10 ip4:152.121.36.67 ip4:152.121.49.12 ip4:152.121.36.70 ip4:152.121.24.33 ip4:152.121.24.34 ip4:152.121.25.33 ip4:152.121.25.34 include:_spf.eemsg.mail.mil -all"
+; EOF

@@ -1,0 +1,24 @@
+; Zone File for snort.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	fiona.ns.cloudflare.com.
+		IN	NS	lakas.ns.cloudflare.com.
+		IN	MX	None snort.org
+		IN	MX	None snort.org
+		IN	MX	None snort.org
+		IN	MX	None snort.org
+None		IN	A	128.177.8.30
+None		IN	A	104.28.24.35
+None		IN	A	104.28.25.35
+None		IN	A	104.28.25.35
+None		IN	A	104.28.24.35
+None		IN	TXT	"v=spf1 mx ip4:68.177.102.4 ip4:64.214.53.2 ip4:64.214.53.10 ip4:64.214.53.2  ip4:64.214.53.55 ip4:107.20.146.244 include:sendgrid.net -all"
+; EOF

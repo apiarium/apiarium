@@ -1,0 +1,30 @@
+; Zone File for juniper.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	udns2.ultradns.net.
+		IN	NS	ns1.p10.dynect.net.
+		IN	NS	ns3.p10.dynect.net.
+		IN	NS	udns1.ultradns.net.
+		IN	NS	ns4.p10.dynect.net.
+		IN	NS	ns2.p10.dynect.net.
+		IN	MX	None juniper.net
+None		IN	A	208.74.204.130
+None		IN	A	209.200.153.102
+None		IN	A	184.106.55.83
+None		IN	A	172.226.231.148
+None		IN	A	174.129.25.170
+None		IN	CNAME	jnet.lithium.com.
+None		IN	CNAME	webfarm-11-ddos.q4web.com.
+None		IN	CNAME	www.juniper.net.edgekey.net.
+None		IN	TXT	"v=spf1 ip4:72.18.151.74 ip4:216.185.83.64/27 ip4:216.185.73.96/27 ip4:216.185.79.160/27 ip4:66.129.224.36 ip4:66.129.224.48/29 include:spf.protection.outlook.com ~all"
+None		IN	TXT	"MS=ms30582378"
+None		IN	TXT	"JCbNGIXsMiatjP5ukVgWr8CumlP8pHsSUrdijFkuime2mR2xB8kaVuYzHaqEbhtfPhGOIyryjym9hIP+GVuGCw=="
+; EOF

@@ -1,0 +1,447 @@
+<!--************************************************************************************************************************************************
+    * AUTHORS: Jonathan Miller, O-2; Nathaniel Hart, O-1; Katie Tiedemann, O-1
+    * CREATION DATE: 22 August 2013
+    * PAGE NAME: interact.html
+    * DESCRIPTION: 
+    *     Original Intent: Display currently running injects and a terminal that allows for interaction with the interactive injects and displays 
+    *    passed data of inactive injects. Includes a navigation bar header.
+*************************************************************************************************************************************************-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>Ephor - Interact</title>
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="all">
+        <link href="style.css" rel="stylesheet" media="all">
+    </head>
+<body>
+    <div id="content">
+
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html" title="The ephors (from the Greek for 'on' or 'over' and the Greek word for 'to see'; i.e. 'one who oversees') were leaders of ancient Sparta and shared power with the Spartan kings.">Ephor C2</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Status</a></li>
+                    <li><a href="injects.html">Injects</a></li>
+                    <li class="active"><a href="interact.html">Interact</a></li>
+                </ul>
+                <div class="navbar-right">
+                    <p id="lastUpdate" class="navbar-text"></p>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Host Picker -->
+        <div class="col-md-4">    
+            <div id="hostPicker">         
+            </div>
+        </div>
+        
+        <!-- Terminal Window -->
+        <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <!-- Tool bar button options can go here -->
+                        </div>
+                        <div class="btn-group pull-right"> 
+                            <button id="clearTerminalButton" type="button" class="btn btn-default">Clear Terminal</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            <div id="terminal">
+            </div>
+        </div>
+    </div> <!-- end content -->
+
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/wterm.jquery.js"></script> 
+    <script type="text/javascript" src="js/bootbox.js"></script>
+    <link href="css/wterm.css" rel="stylesheet">
+
+    <script>
+    // Hold selected targets for page refresh
+    var selectedHostnameSaver = Array();
+    var selectedHostnameSaverCopy = Array();
+    /** 
+        * This will set up the terminal to work.
+    */
+    $(document).ready(function() {
+        $('#terminal').wterm( {AJAX_METHOD: 'POST', AJAX_PARAM: 'command', AJAX_URL: '/interact', AJAX_EXTRAS: {'option':'interact', 'action':'inject'}, HEIGHT: '($(window).height()*.80).toString()', WIDTH: "'100%'"} );
+        $('#terminal').data().beforeSubmit = function(){
+            settings = $('#terminal').data();
+            // and add them to the target list
+            settings.targets = Array();
+            settings.targetNames = Array();           
+ 
+//console.log('settings:');
+//console.dir(settings);
+            checked_boxes = $('input:checkbox:checked');
+            $.each(checked_boxes, function(index, checkbox){
+//console.log('checkbox' + index);
+//console.dir(checkbox);
+//console.log('parentNode');
+//console.dir(checkbox);
+                target = $(checkbox).data('id').split('-&-')[0];
+                targetName = checkbox.parentNode.parentNode.innerText;
+                settings.targetNames.push(targetName);                
+                settings.targets.push(target);
+            });
+
+        };
+    });
+    
+    /** differentInjectSelected(checkbox)
+        * Checks for only one inject type selection at a time. If an inject of a different type is selected, return true. If no other 
+        * selections are currently made, return false. If other selections are already made but of the same inject type also, return false.
+        * @param checkbox - hidden checkbox item associted with a clicked hostname
+        * @return - true or false
+    */
+    function differentInjectSelected(checkbox) {
+        if (selectedHostnameSaver.length <= 0) {
+            // No other current selections
+            return false;
+        } else {
+            // Compare the new selection to the selections saved in the array
+            var injectType = $(checkbox).attr("data-id").split("-&-")[2];
+            // Compare to inject type of items in array
+            var injectsSelected;
+            selectedHostnameSaverCopy = selectedHostnameSaver.slice(0); //Duplicate array
+            while (selectedHostnameSaverCopy.length > 0) {
+                injectsSelected = selectedHostnameSaverCopy.shift();
+                if (injectsSelected.split("-&-")[2] != injectType) {
+                    // Make an alert stating that two ranges of different inject type cannot be selected at the same time.
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** checkAndHighlight(checkbox)
+        * Called when a user clicks on an item in the targets table. If the item is already checked, uncheck it. Check to see if the target 
+        * clicked is of a different inject type than already selected target. If so, clear the selectedHostnameSaver array, add the new selection
+        * and reload the table. Else, add the new target to the list. 
+        * Save checked and unchecked state in an array, for use on page refresh. 
+        * Checks to see the type of inject running and disables or enables the terminal input
+        * @param checkbox - hidden checkbox item associted with a clicked hostname
+    */
+    function checkAndHighlight(checkbox) {
+        if ($(checkbox).prop("checked")) {
+            $(checkbox).prop("checked", false);
+            $(checkbox.parentNode.parentNode).removeClass("activated");
+            var index = selectedHostnameSaver.indexOf($(checkbox).attr("data-id"));
+            if (index > -1) {
+                selectedHostnameSaver.splice(index, 1);
+            }
+        } else if (differentInjectSelected(checkbox)){   //If user is selecting a host with a different inject from others already selected
+            //Clear array
+            selectedHostnameSaver.length = 0;
+            //Add new item to array
+            selectedHostnameSaver.push($(checkbox).attr("data-id"));
+            
+            //If user selects an inactive inject disable the terminal input, else enable it
+            if ($(checkbox).parent().parent().hasClass("inactive")) {
+                $('#terminal').children().children().children().attr("disabled", true);
+            } else {
+                $('#terminal').children().children().children().attr("disabled", false);
+            }
+            showTargets();
+        } else {
+            $(checkbox).prop("checked", true);
+            $(checkbox.parentNode.parentNode).addClass("activated");
+            selectedHostnameSaver.push($(checkbox).attr("data-id"));
+            
+            //If user selects an inactive inject disable the terminal input, else enable it
+            if ($(checkbox).parent().parent().hasClass("inactive")) {
+                $('#terminal').children().children().children().attr("disabled", true);
+            } else {
+                $('#terminal').children().children().children().attr("disabled", false);
+            }
+        }
+    }
+    
+    /** reCheckAndHighlight(checkbox)
+        * Called when the showTargets() is refreshed. All items start unchecked. Does not manipulate the array.
+        * @param checkbox - hidden checkbox item associted with a clicked hostname
+    */
+    function reCheckAndHighlight(checkbox) {
+        //If user is unselecting a host
+        if ($(checkbox).prop("checked")) {
+            $(checkbox).prop("checked", false);
+            $(checkbox.parentNode.parentNode).removeClass("activated");
+            var index = selectedHostnameSaver.indexOf($(checkbox).attr("data-id"));
+        } else {
+            $(checkbox).prop("checked", true);
+            $(checkbox.parentNode.parentNode).addClass("activated");
+        }
+    }
+
+    /** showTargets()
+        * Display all of the targets grouped by inject type first and then range. Initiate all of the necessary click listeners on the onjects created.
+    */
+    function showTargets(){
+        // Grab the json data from the server; populate the view
+        $.get('/injects', function(data) {
+            
+            $("#hostPicker").empty();
+            
+            console.log("Running Injects");
+            console.log(data);
+            
+            // Set the time of the last update
+            $('#lastUpdate').text("Last update: "+getTimeString());
+
+            // Put table in a panel
+            targetPanel = '<div class="panel panel-default">'; 
+            targetPanel += '<div class="panel-heading"><table style="width:100%"><tr>' +
+                        '<td><h2 class="panel-title">Currently Running Injects</h2></td>' +
+                        '<td align="right"><div class="btn-group"><button id="clearButton" type="button" class="btn btn-default">Uncheck All</button>' +
+                        '</div></td></tr></table></div>';
+
+            // Table layout of hosts, arranged by Injects
+            targetTable = '<table class="table table-condensed table-hover table-bordered">' +
+                '<tr><th>Inject</th><th>Range</th><th class="hiddenCheckboxColumn">Selected</th><th>Hostname</th></tr>';
+            
+            /** 
+                * Run through each inject. Injects have seperate display code, due to the different requirements.
+                * interactive type (synchronus) - can type in terminal
+                * inactive type (asynchronus) - cannot type and has icon waiting for data to be returned
+                * none - cannot enter any data, does not return anything (not displayed)
+            */
+            $.each(data, function(inject_index, inject) {
+                if (inject.interactive == 2){
+                    // Add to active table, returns data and can be passed data
+                    // Remove spaces within inject_index so that they can be used in HTML classes
+                    var inject_index_no_spaces = inject_index.replace(/ /g, '_');
+                    
+                    // Find number of clients that we have per inject
+                    var clientsPerInject = 0;
+                    $.each(inject.ranges, function(range_index, rangeC2) {
+                        clientsPerInject = rangeC2.length + 1;
+                    });
+                    
+                    // Inject multi-column cell is as tall as the number of clients affected
+                    newRow = '<tr class="injectRow clickRow"><td rowspan="' + (clientsPerInject + 1) + '">' + inject_index + '</td>';
+                    
+                    $.each(inject.ranges, function(range_index, rangeC2) {
+
+                        
+                        // Remove spaces within range_index so that it can be used in HTML classes
+                        var range_index_no_spaces = range_index.replace(/ /g, '_');
+
+                        newRow += '<tr class="rangeRow clickRow"><td rowspan="' + (rangeC2.length + 1)  + '">' + range_index + '</td>';
+
+                        $.each(rangeC2, function(client_index, client) {
+                            //console.log(client);
+                            newRow += '<tr class="clickRow clientRow ' + inject_index_no_spaces + ' ' + range_index_no_spaces + ' interactive">' +
+                                        '<td class="hiddenCheckboxColumn"><input type="checkbox" data-id="'+ client.id + '-&-' + 
+                                        range_index_no_spaces + '-&-' + inject_index_no_spaces +'"></td>';
+                                    newRow += '<td>' + client.hostname + '  ' + client.ip + '<!-- <span class="glyphicon glyphicon-comment green pull-right"> --></span></td></tr>';
+                        });
+                        
+                        newRow += '</tr>'; // end of (multiple-columned) range cell
+                    });
+                    
+                    newRow += '</tr>'; // end of (multiple-columned) inject cell
+                    targetTable += newRow;
+                } else if (inject.interactive == 1){
+                    // Add to inactive table, returns data, but cannot be passed data
+                    // Remove spaces within inject_index so that they can be used in HTML classes
+                    var inject_index_no_spaces = inject_index.replace(/ /g, '_');
+                    
+                    // Find number of clients that we have per inject
+                    var clientsPerInject = 0;
+                    $.each(inject.ranges, function(range_index, rangeC2) {
+                        clientsPerInject = rangeC2.length + 1;
+                    });
+                    
+                    // Inject multi-column cell is as tall as the number of clients affected
+                    newRow = '<tr class="injectRow clickRow"><td rowspan="' + (clientsPerInject + 1) + '">' + inject_index + '</td>';
+                    
+                    $.each(inject.ranges, function(range_index, rangeC2) {
+
+                        
+                        // Remove spaces within range_index so that it can be used in HTML classes
+                        var range_index_no_spaces = range_index.replace(/ /g, '_');
+
+                        newRow += '<tr class="rangeRow clickRow"><td rowspan="' + (rangeC2.length + 1)  + '">' + range_index + '</td>';
+
+                        $.each(rangeC2, function(client_index, client) {
+                            //console.log(client);
+                            var clientResponse = client.response;
+                            newRow += '<tr class="clickRow clientRow ' + inject_index_no_spaces + ' ' + range_index_no_spaces + ' inactive" data-response="' + clientResponse +'">' +
+                                        '<td class="hiddenCheckboxColumn"><input type="checkbox" data-response="' + client.response + '" data-id="' + client.id + '-&-' + 
+                                        range_index_no_spaces + '-&-' + inject_index_no_spaces +'"></td>';
+                            newRow += '<td>' + client.hostname + '  ' + client.ip + '<span class="glyphicon glyphicon-file pull-right red"></span></td></tr>';
+                        });
+                        
+                        newRow += '</tr>'; // end of (multiple-columned) range cell
+                    });
+                    
+                    newRow += '</tr>'; // end of (multiple-columned) inject cell
+                    targetTable += newRow;
+                } else {
+                    //Don't care, it doesn't return any data
+                }
+            });
+            
+            targetTable += '</table>';
+        
+            targetPanel += targetTable;
+            targetPanel += '</div>';
+
+            targetSection = $("#hostPicker");
+            targetSection.append(targetPanel); 
+
+            // Re-select ranges after refresh
+            var element;
+            selectedHostnameSaverCopy = selectedHostnameSaver.slice(0); //Duplicate array
+            while (selectedHostnameSaverCopy.length > 0) {
+                element = selectedHostnameSaverCopy.shift();
+                reCheckAndHighlight($('*[data-id="' + element + '"]')[0]);
+            }
+            
+            //Data-response contains data, set color of file glypicon to green and remove red class. Green class i
+            if ($(".inactive").data("response") != "") {
+                $(".red").addClass("green");
+                $(".red").removeClass("red");
+            } 
+            
+            /** 
+                * If user clicks on an inactive inject, publish data to the terminal. If still waiting on data say that, if data is ready, post it
+                * to the terminal
+            */
+            $(".inactive").click(function(e) {
+                var response;
+                if ($(".inactive").data('response') == ""){
+                    response = "Still waiting on data...";
+                } else {
+                    response = $(".inactive").data("response").replace(/\n/g,'\r\n');
+                }
+                $('#terminal').data().update_content($('#terminal').data().PS1, '', response);
+            });
+            
+            /** 
+                * If user clicks anywhere in the row, check the checkbox. If inject type is inactive diable the terminal
+            */
+            $(".clientRow").click(function(e) {
+                checkbox = e.target.parentNode.childNodes[0].childNodes[0];
+                checkAndHighlight(checkbox);
+                
+                //If user selects an inactive inject disable the terminal input
+                if ($(checkbox).parent().parent().hasClass("inactive")) {
+                    //console.log("trying to set input to disabled");
+                    $('#terminal').children().children().children().attr("disabled", true);
+                } 
+            });
+
+            /** 
+                * If user clicks anywhere in the multi-column range cell, check the related checkboxes. Check if new item clicked is
+                * of the same type as previously clicked objects. If the inject type is inactive, disable the terminal
+            */
+            $(".rangeRow").click(function(e) {
+                rangeName = e.target.innerText.replace(/ /g, '_');
+                var injectName = $(this).next().attr("class").split(" ")[2]; 
+                
+                /** 
+                    * For each range name check that the new item clicked is of the same type of range as the previous ones... (NOT SURE HERE...)
+                */
+                $('.' + rangeName).each(function(row_index, row) {
+                    checkbox = row.childNodes[0].childNodes[0];
+                    var checkboxInjectType = $(checkbox).data("id").split("-&-")[2];
+                    if (checkboxInjectType == injectName){
+                        checkAndHighlight(checkbox);
+                    }
+                });
+                
+                //If user selects an inactive inject disable the terminal input
+                if ($(checkbox).parent().parent().hasClass("inactive")) {
+                    console.log("trying to set input to disabled");
+                    $('#terminal').children().children().children().attr("disabled", true);
+                }
+                
+            });
+
+            /** 
+                * Check all targets of selected inject. If the inject type is inactive, disable the terminal
+            */
+            $(".injectRow").click(function(e) {
+                injectName = e.target.innerText.replace(/ /g, '_');
+                $('.' + injectName).each(function(row_index, row) {
+                    checkbox = row.childNodes[0].childNodes[0];
+                    //console.log("checkbox inject column click ", checkbox);
+                    checkAndHighlight(checkbox);
+                });
+            });
+
+            /** 
+                * Clear all selected targets
+            */
+            $("#clearButton").click(function(e) {
+                //console.log(e);
+                $("input:checkbox").prop("checked", false);
+                $("input:checkbox").parents().parents().removeClass("activated");
+                selectedHostnameSaver=[];
+            });
+            
+            /** 
+                * Clear all terminal input and output
+            */
+            $("#clearTerminalButton").click(function(e) {
+                $(".undefined").empty();   
+            });
+        });
+    }
+    
+    /** 
+        * Refresh ths dashboard every 5 seconds
+    */
+    setInterval(function(){
+        if($('.modal.fade.in').length === 0 && $('.popover.fade.bottom.in').length == 0){
+            console.log("Refreshing content")
+            showTargets();
+        }
+    }, 5000); //5000 = 5 seconds
+    
+    /** 
+        * Get the time for keeping track of last update
+    */
+    function getTimeString(){
+        var retStr = "";
+        var d = new Date();
+        var h = d.getHours().toString();
+        if(h.length == 1){
+            h = '0'+h;
+        }
+        retStr += h+':';
+        var m = d.getMinutes().toString();
+        if(m.length == 1){
+            m = '0'+m;
+        }
+        retStr += m+':';
+        var s = d.getSeconds().toString();
+        if(s.length == 1){
+            s = '0'+s;
+        }
+        retStr += s;
+        return retStr;
+    }
+    
+    /** 
+        * Code that runs when page is first loaded. 
+    */
+    $(document).ready(showTargets);
+</script>
+</body>
+</html>
+

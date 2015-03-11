@@ -1,0 +1,25 @@
+; Zone File for pch.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	anyns.pch.net.
+		IN	NS	ns2.pch.net.
+		IN	NS	ns3.pch.net.
+		IN	MX	None pch.net
+		IN	MX	None ns2.pch.net
+		IN	MX	None ns2.pch.net
+None		IN	A	204.61.216.41
+None		IN	A	206.220.231.59
+None		IN	A	204.61.216.4
+None		IN	A	204.42.254.5
+None		IN	A	206.220.231.3
+None		IN	A	204.61.216.55
+None		IN	TXT	"v=spf1 ip4:206.220.231.75 a mx a:ns.lahai.com ~all"
+; EOF

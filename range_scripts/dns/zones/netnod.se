@@ -1,0 +1,20 @@
+; Zone File for netnod.se
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	slave.sth.netnod.se.
+		IN	NS	slave.gbg.netnod.se.
+		IN	NS	slave.svl.netnod.se.
+		IN	MX	None netnod.se
+None		IN	A	192.36.144.116
+None		IN	A	192.36.133.116
+None		IN	A	192.71.80.108
+None		IN	A	192.36.135.116
+; EOF

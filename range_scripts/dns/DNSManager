@@ -1,0 +1,627 @@
+#!/usr/bin/python
+"""
+DNSManager - This script handles two primary functions: It mirrors real-world DNS architecture and allows the management of those records within the system.
+The manager works as follows:
+    The manager is built to work with a webmirror folder which contains the web roots for different sites.  
+    This folder is used to generate the list of domains which need to be added to the cache.
+    The manager uses either dnspython or the system's built in 'dig' command to gather existing DNS records (internet required)
+    The manager creates a flat file cache with all the records in it -- It then uses these records to create zones and hint files
+    The zones file contains all records for a given SLD. These records are stored in a 'output/zones' directory when generated.
+    The hints and other configuration files are stored in the 'output' directory.
+    When ready, the results can be 'commited' which copies them to the proper location on the system.
+
+IMPORTANT: In order for the view's to work in BIND. The custom Bind 10 compilation must be used whith the virtual socket limit increased.
+
+Adding records to the system simply modifies the mirroring process to take records from user input instead of from a DNS Server. The rest of the process is 
+the same.
+
+
+Cachefile format:<domain> <rtype> <results>
+
+"""
+import cmd, subprocess
+import os, time, sys
+import shutil
+DEBUG_LEVEL = 2
+
+RES = []
+TLD = []
+SLD = []
+ZONES = []
+
+USE_DNSPYTHON = False
+
+CACHE_FILE = '.dnscache2'
+MANUAL_CACHE_FILE = '.manualcache'
+DOMAIN_FILE = 'checkup_domains.txt'
+WEBROOT = '/mnt/wwwmirror'
+#Location pairs, use tuples. Index:0 is local, Index:1 is system
+CONFIG_FILEP = ('named.conf.local','/etc/bind/named.conf.local')
+ZONES_DIRP = ('zones','/etc/bind/zones')
+ROOT_DIRP = ('root','/etc/bind/') 
+
+
+if USE_DNSPYTHON:
+    import dns.resolver as resolver
+RAW_REC_LEN = 3
+RTYPES =["A","NS","MX","TXT","SOA"] 
+
+def debug(msg,level=1):
+    """Use this function to print messages. Message will print if the current debug level is >= to the message level.
+    Use debug level 0 for standard messages that you want to be muted in quiet mode."""
+    if level > 9:
+        raw_input(msg)
+    elif DEBUG_LEVEL>=level:
+        print msg
+
+    
+def dig(domain,rdtype='ANY'):
+    "Lookup domain records using dnspython. If dnspython is not installed it will attempt to use the system's dig instead"
+    rdtype=rdtype.upper()
+    res = []
+    debug("[+]Resolving {0} for {1}".format(rdtype,domain))
+    if rdtype=='ANY':
+        for rdtype in RTYPES:
+            try: res.extend([(domain, rdtype, e.to_text()) for e in resolver.query(domain,rdtype)])
+            except: pass
+    elif rdtype in RTYPES:
+        try: res.extend([(domain, rdtype, e.to_text()) for e in resolver.query(domain,rdtype)])
+        except: pass
+    else:
+        raise Exception("Unknown record type:{0}".format(rdtype))
+    return res
+
+def dig2(domain,rdtype='ANY'):
+    "Call the system's dig to do the dns request"
+    res = os.popen("dig +nocmd +nocomments +noqr +noquestion +nostats {0} {1}".format(rdtype,domain)).read()
+    res = res.split('\n')
+    res = filter(len,res)
+    for i in xrange(len(res)):
+        res[i] = filter(len,res[i].split('\t'))
+    res = filter(lambda x: x[3] in RTYPES,res)
+    return res
+    
+if not USE_DNSPYTHON:
+    debug("WARNING: USING SYSTEMS DIG",0)
+    dig = dig2
+
+def fmat(domain,abs=False):
+    "Formats a domain to either be an absolute domain (with a . on the end) or a relative domain"
+    if len(domain) <1: return ""
+    parts = domain.strip(' \n\t.').split('.')
+
+def sld(domain):
+    "returns only the last two sections of the domain in relative format"
+    return '.'.join(domain.strip('. ').split('.')[-2:])
+
+# The views are used as 1 per zone to denote which ip addresses the zones will be available on
+viewTemplate = """\
+view "{{0}}" {{{{
+    match-destinations {{{{ {{1}} }}}};
+    recursion no;
+    zone "{{0}}" {{{{ file "{0}/{{0}}"; type master; allow-update {{{{ none; }}}}; }}}};
+}}}};\n""".format(os.path.abspath(ZONES_DIRP[1]))
+createView = lambda zone,ips: viewTemplate.format(zone,ips)
+
+class NS:
+    """This is the nameserver object. Create it, update it using the cache or by resolving domain records, then
+    write the information to a file. 
+    Cachefile format:<domain> <rtype> <results>"""
+    iDOMAIN, iRTYPE, iRES = xrange(3)
+
+    def __init__(self,cachefile,**kwargs):
+        # instance variables
+        self.rawCache = []
+        self.nsCache = {}
+        self.tldCache = {}
+        self.cacheFile = cachefile
+        self.zones = {}
+        # Initialization
+        if os.path.isfile(self.cacheFile):
+            self.loadCache(self.cacheFile)
+        else:
+           debug("[!]{0} is not a file".format(self.cacheFile))
+           self.cacheFile=None
+
+    def _update(self):
+        "Internal method used to update different parsed versions of the raw cache"
+        for i,rr in enumerate(self.rawCache):
+            if len(rr) != 3:
+                self.rawCache.pop(i)
+                debug("[!]Record the wrong size: {0}".format(rr))
+                continue
+            if rr[NS.iRTYPE] == "NS":
+                ns = rr[NS.iRES]
+                domain = rr[NS.iDOMAIN]
+                self.nsCache[ns] = self.nsCache.get(ns,[]) + [domain,]
+            key = sld(rr[0])
+            if not key in self.zones:
+                self.zones[key] = Zone(key)
+            self.zones[key].update(rr)
+            tld = rr[0].strip('.').split('.')[-1]
+            if not tld in self.tldCache:
+               self.tldCache[tld] = [] 
+            self.tldCache[tld].append(rr)
+
+    def addRecord(self,rr):
+        if type(rr)==tuple:
+            if len(rr) != 3:
+                print "{0} is not the right length".format(rr)
+                return False
+        elif type(rr)==list:
+            if len(rr) != 3:
+                print "{0} is not the right length".format(rr)
+                return False
+        elif type(rr)==str:
+            rr = rr.split()
+            if len(rr) != 3:
+                print "{0} is not the right length".format(rr)
+                return False
+        else:
+            print "{0} is not a valid type of record".format(type(rr))
+        secondLevel = '.'.join(rr[0].split()[-2:])
+        NS = filter(lambda x: x[self.iRTYPE] == "NS",res)
+        if not secondLevel in res and not secondLevel in domainList:
+            domainList.append(secondLevel)
+        for e in NS:
+            if not e[self.iRES] in res and not e[self.iRES] in domainList:
+                domainList.append(e[self.iRES])
+        zone = secondLevel(rr)
+
+    def getNSIPs(self,zone):
+        "Return the ip addresses of the nameservers for a certain Zone aka. SLD (e.g. www.google.com has the SLD of google.com)"
+        if not isinstance(zone,Zone):
+            raise Exception("Please pass only zones to getNSIPs")
+        res = []
+        for e in zone._NS:
+            print e, self.lookup(e,'A')
+            res.append(self.lookup(e,"A"))
+        return res
+
+    def loadCache(self,cachefile):
+        "Load a cachefile. Cachefile format:<domain> <rtype> <results>."
+        recs = open(cachefile).read().split('\n')
+        debug("[+]Cache loaded with {0} records".format(len(recs))) 
+        self.rawCache = map(lambda x: x.strip('\n ').split('\t'),recs)
+        self._update()
+
+    def appendCache(self,cachefile):
+        "Adds another cache file to the cache"
+        recs = open(cachefile).read().split('\n')
+        debug("[+]Cache loaded with {0} records".format(len(recs))) 
+        self.rawCache.extend( map(lambda x: x.strip('\n ').split('\t'),recs))
+        self._update()
+
+    def saveCache(self,filename):
+        "Dump the raw cache to a file"
+        with open(filename,'w') as fp:
+            first = True
+            string = '\n'.join(map(lambda x: '\t'.join(x),self.rawCache))
+            fp.write(string)
+    
+    def lookup(self,domain,rtype='ANY'):
+        "Perform a lookup on the in-memory DNS cache"
+        res = []
+        rtype = rtype.upper()
+        if rtype in RTYPES:
+            res = filter(lambda x: x[0] == domain and x[1] == rtype,self.rawCache)
+        elif rtype == 'ANY':
+            for rt in rtypes:
+                res.extend( filter(lambda x: x[0] == domain and x[1] == rt,self.rawCache))
+        else:
+            raise Exception("Unknown rtype {0}".format(rtype.upper()))
+
+
+    def writeConf(self,confFile=CONFIG_FILEP[0]):
+        "Write the named.conf.local file for the current zones in this object."
+        with open(confFile,'w') as fp:
+            for zone in self.zones.values():
+                ips = self.getNSIPs(zone)
+                if len(ips)==0:
+                    debug("[!]WARNING: There are no nameservers for {0} with an ip recorded".format(zone))
+                fp.write(createView(zone,'; '.join(ips) + ";"))
+            fp.write("; EOF")
+
+    def writeZones(self,directory=ZONES_DIRP[0]):
+        "Write the zone files for the zones in this object"
+        for zone in self.zones:
+            self.zones[zone].writeFile(zonedir=directory)
+
+    def writeRoots(self,directory=ROOT_DIRP[0]):
+        "Write the root hint databases for the TLD's and create the named.conf.root configuration file"
+        "Be sure to include named.conf.root in the named.conf file"
+        nameservers = filter( lambda x: x[NS.iRTYPE]=="NS", self.rawCache)
+        recs = []
+        for ns in nameservers:
+            recs.extend(filter(lambda x: x[NS.iDOMAIN].startswith(ns[0]) and x[NS.iRTYPE] == "A", self.rawCache))
+        tlds = {}
+        for rr in recs:
+            key = rr[0].strip(' .').rsplit('.',1)[1]
+            if key in tlds:
+                tlds[key].update(rr)
+            else:
+                tlds[key]=Zone(key)
+                tlds[key].update(rr)
+        for e in tlds.values():
+            debug("Creating Zone record for {0}".format(e._origin))
+            e.writeFile(os.path.join(directory,'bd.'+e._origin))
+
+    def stats(self,info=("*")):
+        "Prints pertinant statistics about the server. Put the statistics you want in a tupe in info. For all info pass an asterisk."
+        debug("The stats for the nameservers",0)
+        ################ The number of raw records ##################
+        if "*" in info or "count":
+            print "Records  :{0:>6}".format(len(self.rawCache))
+            recs = {}
+            for e in sorted(self.tldCache.items(),key=lambda x: len(x[1]),reverse=True):
+                print "{0:<9}:{1:>6}".format(e[0],len(e[1]))
+        ################  ##################
+        ################  ##################
+        ################  ##################
+        ################  ##################
+
+
+    def resolveDomains(self,domainList):
+        for domain in domainList:
+            domain = domain.strip(' \n\t.')
+            debug("[+]Resolving "+domain)
+            if len(domain) < 1: continue
+            parts = domain.split('.')
+            res = dig(domain)
+            debug("[+]--Records found:{0}".format(len(res)),2)
+            self.addRecord(res)
+
+
+    def resolveDomain(self,domain):
+        self.resolveDomains([domain,])
+
+    def commit(self):
+        print "Committing configuration file"
+        shutil.copy(CONF_FILEP[0],CONF_FILEP[1])
+        print "Committing zone files (refreshes directory)"
+        shutil.rmtree(ZONES_DIRP[1])
+        shutil.copytree(ZONES_DIRP[0],ZONES_DIRP[1])
+        print "Committing TLD root files"
+        for e in os.listdir(ROOT_DIRP[0]):
+            shutil.copy(e,os.path.join(ROOT_DIRP[1],e))
+
+
+    
+    
+
+class Zone:
+    """This object defines a SLD zone that contains an SLD origin like google.com along with the records associated eith it.
+    Right now it supports the protocols listed in the global RTYPES string.
+    """
+    def __init__(self,origin):
+        """Takes the SLD as the origin. e.g. google.com """
+        #flags
+        self.reduced = False
+        #values
+        self._zone = origin
+        self._origin = origin
+        self._SOA = {"ns1":"","ns2":"","se":"3h","ref":"3h","ret":"15m","ex":"1w","min":"1d"}
+        self._NS = [] # "ns.example.com"
+        self._A = [] # (domain,address)
+        self._MX = [] # (domain,priority) 
+        self._TXT = [] # "text"
+        self._CNAME = [] #("domain","ptr to")
+        self._TTL = 172800 #default ttl for zone
+        
+
+    def __str__(self):
+        return self._origin
+
+    def update(self,rr,action="+"):
+        "Parse standard record formats and update the zone accordingly. Possible actions are +,-"
+        "This works with a tuple containing (domain, type, data) or a dig response containing domain, x, x, type, data"
+        "where it doesnt matter what x is"
+        if type(rr)==tuple or type(rr)==list:
+            debug("Updating zone using a tuple from a raw record",3)
+            if len(rr)!=RAW_REC_LEN:
+                debug("The record is not long enough: {0}".format(rr))
+            domain,rtype,res = rr
+            rtype=rtype.upper()
+            if rtype == "NS":
+                self._updateNS(res,action)
+            elif rtype == "A":
+                self._updateA(domain,res,action)
+            elif rtype == "MX":
+                self._updateMX(domain,res,action)
+            elif rtype == "CNAME":
+                self._updateCNAME(domain,res,action)
+            elif rtype == "TXT":
+                self._updateTXT(res,domain,action)
+            elif rtype == "SOA":
+                self._updateSOA(res)
+            else:
+                debug("Unknown record type '{0}'... so it cannot be added to the zone".format(rtype))
+        elif type(rr)==str:
+            if os.path.isfile(rr):
+                data = open(rr).read()
+            data = data.replace('\r','').split('\n')
+            for rr in filter(len,data):
+                rr = rr.split()
+                if not len(rr) == 5:
+                    #TODO More intelligent checking can be done here. For instance, if a line contains
+                    #a string that is a properly formatted domain, a column that is one of the proper rdtypes
+                    #and a column that is a valid record for that data type the record can be accepted
+                    debug("Improper formatting for record: {0}".format(rr),2)
+                else:
+                    #recursion! Make sure you arent accidentally passing a string or this is infinite
+                    self.update((fmat(rr[0]),rr[3],rr[4]),action)
+            debug("Updating zone using a string from what I am assuming is a dns response",3)
+        else:
+            debug("[!]WARNING: The record {0} was an unknown type {1}".format(rr,type(rr)))
+           
+
+            
+
+    def _updateSOA(self,raw=None,**kwargs):
+        "Possible SOA fields: ns1, ns2, se, ref, ret, ex, min"
+        if type(raw)==str:
+            pass
+            #TODO Update so that the type can be raw string
+        fields = ['ns1', 'ns2', 'se', 'ref', 'ret', 'ex', 'min']
+        raw=dict(zip(fields,raw.split()))
+         
+        map
+        for key in kwargs.keys():
+            if key in self._SOA.keys():
+                self._SOA[key] = kwargs[key]
+
+    def _updateNS(self,domain,action="+"):
+        "actions are +, -, and -- with + as default and -- to reset"
+        self.reduced = False
+        if action == "-":
+            try: self._NS.remove(domain)
+            except: pass
+        elif action == "--":
+            self._NS = []
+        elif action == "+":
+            if not domain in self._NS:
+                self._NS.append(domain)
+        else:
+            raise Exception("The action '{0}' is not not valid for updateNS".format(action))
+   
+    def _updateA(self,domain,address,action="+"):
+        """actions are +, -, and -- with + as default and -- to reset
+           - Specifying a domain or address of * to match all"""
+        self.reduced = False
+        if action == "-":
+            if domain == "*" and address == "*":
+                Exception("Don't be coy -- use the reset action")
+            elif domain == "*":
+                for e in self._A:
+                    if address == e[1]: self._A.remove(e)
+            elif address == "*":
+                for e in self._A:
+                    if domain == e[0]: self._A.remove(e)
+            else:
+                try: self._A.remove((domain,address))
+                except: pass
+        elif action == "--":
+            self._A = []
+        elif action == "+":
+            if not domain in self._NS:
+                self._A.append((domain,address))
+        else:
+            raise Exception("The action '{0}' is not not valid for updateA".format(action))
+
+    def _updateMX(self,domain,priority,action="+"):
+        """actions are +, -, and -- with + as default and -- to reset
+           - Specifying a domain or address of * to match all"""
+        self.reduced = False
+        if action == "-":
+            if domain == "*" and priority == "*":
+                Exception("Don't be coy -- use the reset action")
+            elif domain == "*":
+                for e in self._MX:
+                    if priority == e[1]: self._MX.remove(e)
+            elif address == "*":
+                for e in self._MX:
+                    if domain == e[0]: self._MX.remove(e)
+            else:
+                try: self._MX.remove((domain,priority))
+                except: pass
+        elif action == "--":
+            self._MX = []
+        elif action == "+":
+            if not domain in self._NS:
+                self._MX.append((domain,priority))
+        else:
+            raise Exception("The action '{0}' is not not valid for updateMX".format(action))
+
+    def _updateTXT(self,text,domain="",action="+"):
+        """actions are +, -, and -- with + as default and -- to reset
+           - Specifying a domain or text of * to match all
+           - leave domain blank for the record to apply to the origin"""
+        self.reduced = False
+        if action == "-":
+            if domain == "*" and text == "*":
+                Exception("Don't be coy -- use the reset action")
+            elif domain == "*":
+                for e in self._TCT:
+                    if text.startswith(e[1]): self._TXT.remove(e)
+            elif text == "*":
+                for e in self._TCT:
+                    if domain == e[0]: self._TXT.remove(e)
+            else:
+                try: self._TXT.remove((domain,text))
+                except: pass
+        elif action == "--":
+            self._TXT = []
+        elif action == "+":
+            if not domain in self._NS:
+                self._TXT.append((domain,text))
+        else:
+            raise Exception("The action '{0}' is not not valid for _updateCNAME".format(action))
+        
+
+    def _updateCNAME(self,domain,ptr,action="+"):
+        """actions are +, -, and -- with + as default and -- to reset
+           - Specifying a domain or ptr of * to match all"""
+        self.reduced = False
+        if action == "-":
+            if domain == "*" and ptr == "*":
+                Exception("Don't be coy -- use the reset action")
+            elif domain == "*":
+                for e in self._CNAME:
+                    if ptr == e[1]: self._CNAME.remove(e)
+            elif ptr == "*":
+                for e in self._CNAME:
+                    if domain == e[0]: self._CNAME.remove(e)
+            else:
+                try: self._CNAME.remove((domain,ptr))
+                except: pass
+        elif action == "--":
+            self._CNAME = []
+        elif action == "+":
+            if not domain in self._NS:
+                self._CNAME.append((domain,ptr))
+        else:
+            raise Exception("The action '{0}' is not not valid for updateCNAME".format(action))
+
+    def _updateOrigin(self,origin):
+        self._origin = origin
+
+    def validate(self):
+        "NOT YET IMPLEMENTED"
+        "This function will check to make sure that everything is right in the record"
+        return []
+    
+    def reduce(self):
+        "NOT YET IMPLEMENTED"
+        "In the process of generating a zone it is easier to add records in their absolute format."
+        "This function will convert from the absolute format to one that uses the $ORIGIN variable properly"
+        self.reduced = True
+
+    def writeFile(self,filename=None,zonedir="."):
+        "Dump the contents of the Zone into a zone file"
+        if filename==None: filename = self._origin
+        if not os.path.isdir(zonedir):
+            os.makedirs(zonedir)
+        filename = os.path.join(zonedir,filename)
+        fp = open(filename,'w')
+        fp.write("; Zone File for {0}\n".format(self._origin))
+        fp.write("; Generated {0}\n".format(time.ctime()))
+        fp.write("$TTL {0}\n".format(self._TTL))
+        fp.write("$ORIGIN {0}\n".format(fmat(self._origin,True)))
+        fp.write("@\t\tIN\tSOA\t{0} {1} (\n".format(self._SOA['ns1'],self._SOA['ns2']))
+        for e in ['se','ref','ret','ex','min']: fp.write("\t\t\t  {0}\n".format(self._SOA[e]))
+        fp.write("\t\t\t  )\n")
+        for e in self._NS: fp.write("\t\tIN\tNS\t{0}\n".format(e))
+        for e in sorted(self._MX,key=lambda x: x[1]): fp.write("\t\tIN\tMX\t{0} {1}\n".format(fmat(e[1],True),e[0]))
+        for e in self._A: fp.write("{0}\t\tIN\tA\t{1}\n".format(fmat(e[0],True),e[1]))
+        for e in self._CNAME: fp.write("{0}\t\tIN\tCNAME\t{1}\n".format(fmat(e[0],True),e[1]))
+        for e in self._TXT: fp.write("{0}\t\tIN\tTXT\t{1}\n".format(fmat(e[0],True),e[1]))
+        fp.write("; EOF")
+        fp.close()
+
+    def __repr__(self):
+        return self.__str__()
+
+
+
+#############################################################################################################
+#############################################################################################################
+#############################################################################################################
+dns = None
+
+class Shell(cmd.Cmd):
+    global nameserver,DEBUG
+    def do_ls(self,line):
+        "List the statistics for the nameserver instance"
+        nameserver.stats()
+
+    def do_dig(self,domain):
+        "Print the dig results of the domain"
+        for e in dig(domain):
+            print ' '.join(e)
+
+    def do_crawl(self,line):
+        if line:
+            domains = os.listdir(line)
+            nameserver.resolveDomains(domains)
+
+
+    def do_process(self,target):
+        print "Running the entire DNS mirroring process against " + target
+        #get the list of domains from the webroot
+        domains = os.listdir(target)
+        #crawl the dns records of the sites into the cache
+        if False:
+            nameserver.resolveDomains(domains)
+        else:
+            print "Simulating crawl"
+        #process the cache into the nameserver object
+        nameserver = NS(CACHE_FILE)
+        #add the manual records
+        if os.path.isfile(MANUAL_CACHE_FILE):
+            nameserver.appendCache(MANUAL_CACHE_FILE)
+        #write the  config file
+        #write the TLD records
+        #write the zones
+        self.do_create(None)
+        #If the user wants to, run commit
+        answer = raw_input("Would you like to commit the update? [y|N]:").lower()
+        if 'y' in answer:
+            nameserver.commit()
+
+    def do_commit(self,line):
+        print "Copying DNS information to the BIND system"
+        nameserver.commit()
+        print "[+]If this is the DNS Server please run 'service bind9 restart' by typing 'reload'"
+
+    def do_create(self,line):
+        "Creates the zones and configuration files based on the current state of the nameserver"
+        print "[+]Creating zone records" 
+        nameserver.writeZones()
+        print "[+]Writing local configuration file"
+        nameserver.writeConf()
+        print "[+]Writing roots configuration file"
+        nameserver.writeRoots()
+        print "[+]Done"
+
+    def do_test(self,line):
+        pass
+
+    def do_reload(self,line):
+        "Restarts bind9 if the script is running as root and bind9 is a service (only as root)"
+        try:
+            a = subprocess.Popen("sudo service bind9 restart".split(),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+            print a[0]
+        except:
+            print "Unable to restart bind"
+
+    def do_add(self,dns):
+        "Add a single record to the nameserver: "
+        nameserver.addRecord(line)
+
+    def do_exit(self,line):
+        #if 'y' in raw_input("[<]Would you like to save the cache [Y|n]:").lower():
+        #    nameserver.saveCache()
+        #    print "[+]Cache saved"
+        return True
+
+if __name__=="__main__":
+    "The script is currently configured to do the standards DNS pull of the webroot directory"
+    global nameserver
+    try:
+        nameserver = NS(".dnscache2")
+        shell = Shell()
+        shell.prompt = "DNS Shell>>"
+        if len(sys.argv) > 1:
+            selfName = sys.argv.pop(0)
+            if sys.argv[0] == "shell":
+                shell.cmdloop()
+            else:
+                shell.onecmd(' '.join(sys.argv))
+        else:
+            print "The script is currently configured to do the standards DNS pull of the webroot directory"
+            print "To launch the script, run '{} process <directory>'".format(os.path.split(sys.argv[0])[1])
+            #shell.onecmd("help")
+    except KeyboardInterrupt:
+        print "Closing"
+
+

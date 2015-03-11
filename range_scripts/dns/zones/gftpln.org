@@ -1,0 +1,19 @@
+; Zone File for gftpln.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	pdns06.domaincontrol.com.
+		IN	NS	pdns05.domaincontrol.com.
+		IN	MX	None gftpln.org
+		IN	MX	None gftpln.org
+None		IN	A	216.81.164.17
+None		IN	A	216.81.164.17
+None		IN	TXT	"google-site-verification=-5mHiQbpu2ojoVkBK7OP4YIDJuEciXGQ5gdmZJjSVLk"
+; EOF

@@ -1,0 +1,25 @@
+; Zone File for dhs.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	use3.akam.net.
+		IN	NS	eur2.akam.net.
+		IN	NS	usc2.akam.net.
+		IN	NS	usw4.akam.net.
+		IN	NS	usw3.akam.net.
+		IN	NS	use1.akam.net.
+		IN	NS	asia2.akam.net.
+		IN	NS	asia3.akam.net.
+		IN	MX	None dhs.gov
+None		IN	A	172.229.4.56
+None		IN	A	173.252.133.166
+None		IN	CNAME	www.dhs.gov.edgekey.net.
+None		IN	TXT	"v=spf1" "include:spf.protection.outlook.com" "-all"
+; EOF

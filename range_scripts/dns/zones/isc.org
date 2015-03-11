@@ -1,0 +1,25 @@
+; Zone File for isc.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ord.sns-pb.isc.org.
+		IN	NS	ams.sns-pb.isc.org.
+		IN	NS	sfba.sns-pb.isc.org.
+		IN	NS	ns.isc.afilias-nst.info.
+		IN	MX	None isc.org
+		IN	MX	None isc.org
+None		IN	A	192.5.4.1
+None		IN	A	149.20.64.69
+None		IN	A	199.6.0.30
+None		IN	A	199.6.1.30
+None		IN	A	149.20.64.3
+None		IN	TXT	"$Id: isc.org,v 1.1946 2014-11-25 01:45:32 dmahoney Exp $"
+None		IN	TXT	"v=spf1 a mx ip4:204.152.184.0/21 ip4:149.20.0.0/16 ip6:2001:04F8::0/32 ip6:2001:500:60::65/128 ~all"
+; EOF

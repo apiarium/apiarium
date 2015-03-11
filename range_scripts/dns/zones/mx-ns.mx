@@ -1,0 +1,26 @@
+; Zone File for mx-ns.mx
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	o.mx-ns.mx.
+		IN	NS	c.mx-ns.mx.
+		IN	NS	e.mx-ns.mx.
+		IN	NS	m.mx-ns.mx.
+		IN	NS	x.mx-ns.mx.
+		IN	NS	i.mx-ns.mx.
+		IN	MX	None mx-ns.mx
+		IN	MX	None mx-ns.mx
+None		IN	A	207.248.68.1
+None		IN	A	200.23.1.1
+None		IN	A	192.100.224.1
+None		IN	A	201.131.252.1
+None		IN	A	189.201.244.1
+None		IN	A	200.94.176.1
+; EOF

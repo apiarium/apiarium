@@ -1,0 +1,21 @@
+; Zone File for awsdns-60.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1087.awsdns-60.org.
+		IN	NS	g-ns-766.awsdns-60.org.
+		IN	NS	g-ns-1660.awsdns-60.org.
+		IN	NS	g-ns-188.awsdns-60.org.
+None		IN	A	205.251.197.225
+None		IN	A	205.251.196.63
+None		IN	A	205.251.194.254
+None		IN	A	205.251.198.124
+None		IN	A	205.251.192.188
+; EOF

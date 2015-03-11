@@ -1,0 +1,27 @@
+; Zone File for nist.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	dns-x.boulder.nist.gov.
+		IN	NS	gdnsea.nist.gov.
+		IN	MX	None nist.gov
+None		IN	A	129.6.13.54
+None		IN	A	132.163.4.18
+None		IN	A	129.6.13.54
+None		IN	A	129.6.13.49
+None		IN	A	132.163.4.162
+None		IN	A	132.163.4.9
+None		IN	A	129.6.13.3
+None		IN	CNAME	www.glb.nist.gov.
+None		IN	TXT	"MS=ms22398849"
+None		IN	TXT	"6ShuoNYkq63X28PDktwfiJrelI57YsD6wmUBhrHZoW/eU0EZ2UDFQ2r+e6ghfpspFAOUWM57fjExi9bDVJl7Ig=="
+None		IN	TXT	"v=spf1" "include:spf.protection.outlook.com" "ip4:129.6.13.150" "ip4:129.6.13.151" "-all"
+None		IN	TXT	"5ueCUB34wZbD5IzvXfbhnsWNPw4y1WW/t6dFrRIlpBdi2scUjOsgin5myTv7PqxwXRMI9Z1mmt7rKovsDRhR8A=="
+; EOF

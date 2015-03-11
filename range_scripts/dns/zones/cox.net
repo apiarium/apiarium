@@ -1,0 +1,23 @@
+; Zone File for cox.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns.east.cox.net.
+		IN	NS	ns.cox.net.
+		IN	NS	ns.west.cox.net.
+		IN	MX	None cox.net
+		IN	MX	None cox.net
+None		IN	A	68.1.16.108
+None		IN	A	68.1.16.107
+None		IN	A	68.111.106.68
+None		IN	A	68.99.123.161
+None		IN	A	68.99.123.161
+None		IN	TXT	"v=spf1 ip4:68.230.240.0/24 ip4:68.230.241.0/24 ?all"
+; EOF

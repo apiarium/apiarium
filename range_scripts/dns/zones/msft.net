@@ -1,0 +1,21 @@
+; Zone File for msft.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns2.msft.net.
+		IN	NS	ns1.msft.net.
+		IN	NS	ns4.msft.net.
+		IN	NS	ns3.msft.net.
+None		IN	A	208.84.0.53
+None		IN	A	208.76.45.53
+None		IN	A	208.84.2.53
+None		IN	A	213.199.180.53
+None		IN	A	65.55.226.140
+; EOF

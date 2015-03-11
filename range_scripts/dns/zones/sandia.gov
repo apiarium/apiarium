@@ -1,0 +1,26 @@
+; Zone File for sandia.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns8.sandia.gov.
+		IN	NS	ns9.sandia.gov.
+		IN	NS	ns1.ca.sandia.gov.
+		IN	NS	ns2.ca.sandia.gov.
+		IN	MX	None sandia.gov
+		IN	MX	None sandia.gov
+None		IN	A	198.102.153.153
+None		IN	A	198.102.153.153
+None		IN	A	132.175.7.209
+None		IN	A	132.175.7.210
+None		IN	A	198.206.219.65
+None		IN	A	198.206.219.66
+None		IN	CNAME	sahp10542.sandia.gov.
+None		IN	TXT	"v=spf1 mx ~all"
+; EOF

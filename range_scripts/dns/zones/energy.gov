@@ -1,0 +1,22 @@
+; Zone File for energy.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	fulcrum.doe.gov.
+		IN	NS	ns1.es.net.
+		IN	NS	foxbat.doe.gov.
+		IN	MX	None www.energy.gov
+		IN	MX	None energy.gov
+None		IN	A	199.167.76.13
+None		IN	A	199.167.76.13
+None		IN	CNAME	energy.gov.
+None		IN	TXT	"v=spf1 include:_spf.doe.gov -all"
+None		IN	TXT	"v=spf1 include:_spf.doe.gov -all"
+; EOF

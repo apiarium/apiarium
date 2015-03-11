@@ -1,0 +1,27 @@
+; Zone File for internic.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns.icann.org.
+		IN	NS	a.iana-servers.net.
+		IN	NS	ns2.nsiregistry.net.
+		IN	NS	c.iana-servers.net.
+		IN	NS	b.iana-servers.net.
+		IN	NS	sec3.apnic.net.
+		IN	NS	sec1.apnic.net.
+		IN	NS	ns1.crsnic.net.
+		IN	MX	None internic.net
+		IN	MX	None internic.net
+None		IN	A	192.0.32.9
+None		IN	A	192.0.43.9
+None		IN	CNAME	internicwww.vip.icann.org.
+None		IN	TXT	"v=spf1 redirect=_spf.icann.org"
+None		IN	TXT	"$Id: internic.net 2974 2014-09-16 16:39:53Z mvergara $"
+; EOF

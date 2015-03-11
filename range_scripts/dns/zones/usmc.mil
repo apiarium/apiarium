@@ -1,0 +1,33 @@
+; Zone File for usmc.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	charlie.usmc.mil.
+		IN	NS	usmcdns1.usmc.mil.
+		IN	NS	alpha.usmc.mil.
+		IN	NS	delta.usmc.mil.
+		IN	NS	bravo.usmc.mil.
+		IN	NS	usmcdns1a.usmc.mil.
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+		IN	MX	None usmc.mil
+None		IN	A	192.156.13.121
+None		IN	A	192.156.7.120
+None		IN	A	192.156.71.121
+None		IN	A	192.156.71.120
+None		IN	A	192.156.37.99
+None		IN	A	192.156.7.121
+None		IN	TXT	"v=spf1 mx include:_spf.eemsg.mail.mil ~all"
+; EOF

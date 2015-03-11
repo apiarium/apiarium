@@ -1,0 +1,27 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+auto lo
+iface lo inet loopback
+
+# The mgmt network interface
+auto eth0
+iface eth0 inet static
+	address 192.168.64.76
+	netmask 255.255.255.0
+##########################
+# Range:    192.168.64.X #
+##########################
+# 1-6:      .71-.76
+# 7-13:     .146-.150
+# 14-18:    .154-.158
+# 21-25:    .228-.232
+# 26-31:    .235-.240 (not currently set up)
+
+# The internal interface (SNORT network adaptor)
+auto eth1
+iface eth1 inet static
+	address 172.16.100.1
+	netmask 255.255.255.0
+
+

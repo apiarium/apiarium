@@ -1,0 +1,25 @@
+; Zone File for nic.mx
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	i.mx-ns.mx.
+		IN	NS	o.mx-ns.mx.
+		IN	NS	c.mx-ns.mx.
+		IN	NS	x.mx-ns.mx.
+		IN	NS	e.mx-ns.mx.
+		IN	NS	m.mx-ns.mx.
+		IN	MX	None nic.mx
+		IN	MX	None nic.mx
+None		IN	A	200.33.111.1
+None		IN	A	200.94.180.59
+None		IN	A	200.94.180.58
+None		IN	A	200.94.180.61
+None		IN	A	200.94.180.60
+; EOF

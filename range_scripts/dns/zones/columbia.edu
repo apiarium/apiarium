@@ -1,0 +1,46 @@
+; Zone File for columbia.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.lse.ac.uk.
+		IN	NS	adns2.berkeley.edu.
+		IN	NS	adns1.berkeley.edu.
+		IN	NS	ext-ns1.columbia.edu.
+		IN	NS	sns-pb.isc.org.
+		IN	NS	dns2.itd.umich.edu.
+		IN	MX	None library.columbia.edu
+		IN	MX	None columbia.edu
+None		IN	A	128.59.105.41
+None		IN	A	128.59.222.166
+None		IN	A	128.59.105.92
+None		IN	A	128.59.105.63
+None		IN	A	128.59.105.41
+None		IN	A	128.59.105.24
+None		IN	A	128.59.105.63
+None		IN	A	192.241.166.19
+None		IN	A	128.59.105.63
+None		IN	A	128.59.105.24
+None		IN	A	128.59.105.24
+None		IN	A	128.59.1.1
+None		IN	CNAME	ias-drupal7-prod.cc.columbia.edu.
+None		IN	CNAME	haydn.cul.columbia.edu.
+None		IN	CNAME	ias-deprecated-prod.cc.columbia.edu.
+None		IN	CNAME	ias-drupal7-prod.cc.columbia.edu.
+None		IN	CNAME	www-ltm.cc.columbia.edu.
+None		IN	CNAME	ias-deprecated-prod.cc.columbia.edu.
+None		IN	CNAME	ias-deprecated-prod.cc.columbia.edu.
+None		IN	CNAME	www.a.columbia.edu.
+None		IN	TXT	"google-site-verification=-8HGfOJHFs1mOIh8Yetxk0C5wuc28oVlyntVh2n6pzU"
+None		IN	TXT	"gf0JjYj60ydn8vkTvcv20YbqYNECKKGLHJdys+ZFWKLcBsiO8hOggL3vgM9cniJBCK0+uOh+8UFI9HRkTNYS9g=="
+None		IN	TXT	"v=spf1 ip4:128.59.28.0/24 ip4:128.59.29.0/24 ip4:128.59.59.0/24 ip4:128.59.62.0/24 ip4:128.59.28.160/27 ip4:128.59.29.0/28 ip4:128.59.31.0/24 ip4:128.59.39.0/24 ip4:128.59.72.250 ip4:128.59.72.251 ip4:128.59.84.71 ip4:128.59.84.72 ip4:128.59.213.250 ~all"
+None		IN	TXT	"MS=ms32107722"
+None		IN	TXT	"MS=ms88535648"
+None		IN	TXT	"google-site-verification=79W02b1NsvPOhVkXxG5gXzAXuxuYquPTXmx_l6KfRok"
+; EOF

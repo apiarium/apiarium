@@ -1,0 +1,25 @@
+; Zone File for speedtest.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns4.p11.dynect.net.
+		IN	NS	ns1.p11.dynect.net.
+		IN	NS	ns3.p11.dynect.net.
+		IN	NS	ns2.p11.dynect.net.
+		IN	MX	None speedtest.net
+		IN	MX	None speedtest.net
+		IN	MX	None speedtest.net
+		IN	MX	None speedtest.net
+None		IN	A	72.21.92.82
+None		IN	A	216.146.46.11
+None		IN	A	216.146.46.10
+None		IN	CNAME	cs62.adn.xicdn.net.
+None		IN	TXT	"v=spf1 a mx include:sendgrid.net include:mail.zendesk.com ip4:74.209.160.0/27 ip4:68.64.50.112/28 ~all"
+; EOF

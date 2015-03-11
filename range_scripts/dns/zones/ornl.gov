@@ -1,0 +1,24 @@
+; Zone File for ornl.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-aoa.es.net.
+		IN	NS	ns-lvk.es.net.
+		IN	NS	ns0.ornl.gov.
+		IN	NS	ns1.es.net.
+		IN	MX	None ornl.gov
+		IN	MX	None ornl.gov
+None		IN	A	128.219.177.244
+None		IN	A	128.219.176.9
+None		IN	TXT	"v=spf1 ip4:128.219.177.14 ip4:128.219.177.15 ip4:128.219.177.12 ip6:2620:0:2b30:301::128 ip6:2620:0:2b30:301:d5d6:9409:f043:e56c ip6:2620:0:2b30:301:dfa5:6572:9c37:3e39 include:spf.dynect.net -all"
+None		IN	TXT	"Eoo0gs6"
+None		IN	TXT	"MS=ms52245827"
+None		IN	TXT	"m8eOw3y"
+; EOF

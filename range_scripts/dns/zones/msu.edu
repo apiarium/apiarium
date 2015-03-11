@@ -1,0 +1,20 @@
+; Zone File for msu.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-64.awsdns-08.com.
+		IN	NS	ns-1827.awsdns-36.co.uk.
+		IN	NS	ns-665.awsdns-19.net.
+		IN	NS	ns-1432.awsdns-51.org.
+		IN	MX	None msu.edu
+None		IN	A	35.12.50.192
+None		IN	A	35.9.15.49
+None		IN	TXT	"v=DKIM1 a -all"
+; EOF

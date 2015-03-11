@@ -1,0 +1,23 @@
+; Zone File for timewarner.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns3.timewarner.net.
+		IN	NS	ns1.timewarner.net.
+		IN	NS	ns5.timewarner.net.
+		IN	MX	None timewarner.net
+		IN	MX	None timewarner.net
+None		IN	A	204.74.108.238
+None		IN	A	204.74.109.238
+None		IN	A	199.7.68.238
+None		IN	A	64.14.145.115
+None		IN	A	205.140.229.98
+None		IN	TXT	"ms=ms24645077"
+; EOF

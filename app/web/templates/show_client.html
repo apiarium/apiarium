@@ -1,0 +1,36 @@
+{% extends "parent_template.html" %}
+{% set active_page = "client" %}
+
+{% block title %}Client - {{client.iID}}{% endblock %}
+
+{% block body %}
+{#
+class Client( object ):
+    iId = None
+    sDockerId= None
+    iRangeId= None
+    sMACAddr= None
+    sIPAddr= None
+    sHostName= None
+#}
+<center>
+<table class="table">
+<tr>
+    <td>Id: </td><td>{{client.iId}}</td>
+</tr>
+    <td>DockerId: </td><td>{{client.sDockerId}}</td>
+</tr>
+    <td>RangeId: </td><td><a href="/range/{{client.iRangeId}}">{{client.iRangeId}}</a></td>
+</tr>
+    <td>MAC address: </td><td>{{client.sMACAddr}}</td>
+</tr>
+    <td>IP address: </td><td>{{client.sIPAddr}}</td>
+</tr>
+    <td>Hostname: </td><td>{{client.sHostName}}</td>
+</tr>
+</table>
+</center>
+
+{% endblock %}
+
+

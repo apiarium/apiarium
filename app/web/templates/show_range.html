@@ -1,0 +1,33 @@
+{% extends "parent_template.html" %}
+{% set active_page = "simulator" %}
+
+{% block title %}Range - {{simulator.iID}}{% endblock %}
+
+{% block body %}
+{#
+class Range( object ):
+    iId = None
+    iRangeNumber= None
+    dtLastHeartbeat= None
+    sRangeMasterIPAddr= None
+    sDescription= None
+#}
+<center>
+<table class="table">
+<tr>
+    <td>Id: </td><td>{{simulator.iId}}</td>
+</tr>
+    <td>Range number: </td><td><a href="/range/{{simulator.iRangeNumber}}">{{simulator.iRangeNumber}}</a></td>
+</tr>
+    <td>Last heartbeat: </td><td>{{simulator.dtLastHeartbeat}}</td>
+</tr>
+    <td>IP address: </td><td>{{simulator.sRangeMasterIPAddr}}</td>
+</tr>
+    <td>Description: </td><td>{{simulator.sDescription}}</td>
+</tr>
+</table>
+</center>
+
+{% endblock %}
+
+

@@ -1,0 +1,21 @@
+; Zone File for awsdns-44.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1071.awsdns-44.org.
+		IN	NS	g-ns-1644.awsdns-44.org.
+		IN	NS	g-ns-172.awsdns-44.org.
+		IN	NS	g-ns-750.awsdns-44.org.
+None		IN	A	205.251.197.97
+None		IN	A	205.251.196.47
+None		IN	A	205.251.198.108
+None		IN	A	205.251.192.172
+None		IN	A	205.251.194.238
+; EOF

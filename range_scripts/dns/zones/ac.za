@@ -1,0 +1,19 @@
+; Zone File for ac.za
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	za-ns.anycast.pch.net.
+		IN	NS	ns0.is.co.za.
+		IN	NS	disa.tenet.ac.za.
+		IN	NS	ucthpx.uct.ac.za.
+		IN	MX	None ac.za
+		IN	MX	None ucthpx.uct.ac.za
+None		IN	A	137.158.128.1
+; EOF

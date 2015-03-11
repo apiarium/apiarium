@@ -1,0 +1,38 @@
+; Zone File for harvard.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-261.awsdns-32.com.
+		IN	NS	ns-971.awsdns-57.net.
+		IN	NS	ns-1641.awsdns-13.co.uk.
+		IN	NS	ns-1225.awsdns-25.org.
+		IN	NS	externaldns-c2.harvard.edu.
+		IN	NS	externaldns-c1.harvard.edu.
+		IN	NS	externaldns-c3.br.harvard.edu.
+		IN	MX	None harvard.edu
+		IN	MX	None harvard.edu
+None		IN	A	54.239.172.211
+None		IN	A	54.230.205.226
+None		IN	A	54.230.205.209
+None		IN	A	54.230.207.245
+None		IN	A	54.230.206.35
+None		IN	A	54.239.172.150
+None		IN	A	54.230.205.218
+None		IN	A	54.230.206.199
+None		IN	A	54.236.202.112
+None		IN	A	128.103.200.51
+None		IN	A	128.103.200.35
+None		IN	A	128.119.3.185
+None		IN	CNAME	d1mldapedjoasw.cloudfront.net.
+None		IN	TXT	"jAykGnWytyLeBseMa8x2/MBve6/yQqana4yrAc1ROoei7uZHUkM2FU0Xx4qI/rm+kOGdImZdoq0fdodgLEw1dg=="
+None		IN	TXT	"google-site-verification=xqg8LPF_v_QMEIST789q8xhRDqUEX4_8lQjAvV6YykY"
+None		IN	TXT	"MS=ms35192554"
+None		IN	TXT	"xIGeuA0e5B1BOjTE4IBO806ziFX9G1m2dVJ8zO7CMkmKwZ6MEkMXC0P7n5SRCGOdS9jbceH/7gKYgD4h9FBGKA=="
+; EOF

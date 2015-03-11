@@ -1,0 +1,17 @@
+; Zone File for menog.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.sahara.com.sa.
+		IN	NS	ns2.sahara.com.sa.
+		IN	MX	None menog.org
+None		IN	A	212.76.68.154
+None		IN	A	212.76.68.154
+; EOF

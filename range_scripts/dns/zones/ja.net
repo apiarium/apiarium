@@ -1,0 +1,31 @@
+; Zone File for ja.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.ja.net.
+		IN	NS	ns2.ja.net.
+		IN	NS	ns1.ja.net.
+		IN	NS	ns1.surfnet.nl.
+		IN	NS	ns4.ja.net.
+		IN	MX	None ja.net
+		IN	MX	None ja.net
+		IN	MX	None ns0.ja.net
+		IN	MX	None ns0.ja.net
+		IN	MX	None ja.net
+None		IN	A	128.86.1.20
+None		IN	A	193.63.94.20
+None		IN	A	193.63.105.17
+None		IN	A	193.62.157.66
+None		IN	A	193.63.106.103
+None		IN	A	194.81.227.226
+None		IN	TXT	"MS=ms0ed1fe018a6da7ce5daf4d4021b70d7ef61e9aefa4"
+None		IN	TXT	"qgGjGKnZVnsZ002FhX3d4J2qgOJ09+/vjp87MQ3NNn2q1eGsgtLu7FB6xpDJWOIjIPzjCFmm1S+3b47tVtAehA=="
+None		IN	TXT	"MS=ms87936225"
+; EOF

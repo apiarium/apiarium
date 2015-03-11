@@ -1,0 +1,28 @@
+; Zone File for sans.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	dns31b.sans.org.
+		IN	NS	dns21b.sans.org.
+		IN	NS	dns21a.sans.org.
+		IN	NS	dns31a.sans.org.
+		IN	MX	None sans.org
+		IN	MX	None sans.org
+		IN	MX	None sans.org
+		IN	MX	None sans.org
+None		IN	A	66.35.59.207
+None		IN	A	66.35.59.202
+None		IN	A	66.35.59.202
+None		IN	A	204.51.94.8
+None		IN	A	66.35.59.8
+None		IN	A	66.35.59.7
+None		IN	A	204.51.94.7
+None		IN	TXT	"v=spf1 mx a:smtp24a.sans.org a:smtp34a.sans.org a:lists.sans.org a:mass1a.sans.org a:savfw21a.sans.org a:savfw31a.sans.org ip4:66.35.59.0/24 ip4:204.51.94.0/24 ip4:66.59.0.0/19 ip4:72.19.192.0/18 ~all"
+; EOF

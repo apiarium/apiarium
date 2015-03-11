@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+*.orig
+*.sqlite*
+reference/html
+reference/man

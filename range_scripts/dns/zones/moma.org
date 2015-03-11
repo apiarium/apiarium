@@ -1,0 +1,23 @@
+; Zone File for moma.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns3.zoneedit.com.
+		IN	NS	t1.zoneedit.com.
+		IN	NS	t2.zoneedit.com.
+		IN	NS	ns7.zoneedit.com.
+		IN	MX	None moma.org
+		IN	MX	None moma.org
+		IN	MX	None moma.org
+		IN	MX	None moma.org
+None		IN	A	63.117.124.131
+None		IN	A	63.117.124.131
+None		IN	TXT	"v=spf1 ip4:63.117.124.73 ip4:63.117.124.74 ip4:63.117.124.75 include:_spf.google.com include:_spf.fashiongps.com ~all"
+; EOF

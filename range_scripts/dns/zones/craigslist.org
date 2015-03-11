@@ -1,0 +1,32 @@
+; Zone File for craigslist.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns2f.craigslist.org.
+		IN	NS	ns1p.craigslist.org.
+		IN	NS	ns1f.craigslist.org.
+		IN	NS	ns2p.craigslist.org.
+		IN	MX	None sfbay.craigslist.org
+		IN	MX	None www.craigslist.org
+		IN	MX	None craigslist.org
+		IN	MX	None sfbay.craigslist.org
+		IN	MX	None www.craigslist.org
+		IN	MX	None craigslist.org
+None		IN	A	208.82.238.242
+None		IN	A	208.82.236.145
+None		IN	A	208.82.238.129
+None		IN	A	208.82.238.72
+None		IN	A	208.82.236.71
+None		IN	A	208.82.238.71
+None		IN	A	208.82.236.72
+None		IN	CNAME	cities.l.craigslist.org.
+None		IN	CNAME	www.l.craigslist.org.
+None		IN	TXT	"v=spf1 ip4:208.82.236.96/28 ip4:208.82.238.96/28 -all"
+; EOF

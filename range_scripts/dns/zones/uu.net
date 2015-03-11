@@ -1,0 +1,27 @@
+; Zone File for uu.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	auth00.ns.uu.net.
+		IN	NS	auth210.ns.uu.net.
+		IN	NS	auth60.ns.uu.net.
+		IN	NS	auth200.ns.uu.net.
+		IN	MX	None uu.net
+		IN	MX	None uu.net
+		IN	MX	None uu.net
+		IN	MX	None uu.net
+		IN	MX	None uu.net
+		IN	MX	None uu.net
+None		IN	A	198.6.1.83
+None		IN	A	198.6.1.65
+None		IN	A	195.129.12.74
+None		IN	A	198.6.1.181
+None		IN	A	195.129.12.82
+; EOF

@@ -1,0 +1,30 @@
+; Zone File for udel.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	adns2.upenn.edu.
+		IN	NS	adns1.upenn.edu.
+		IN	NS	dns2.udel.edu.
+		IN	NS	dns1.udel.edu.
+		IN	NS	adns3.upenn.edu.
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+		IN	MX	None udel.edu
+None		IN	A	128.175.13.16
+None		IN	A	128.175.13.17
+None		IN	A	128.175.13.92
+None		IN	TXT	"v=spf1 ip4:128.175.0.0/16 ip4:128.4.0.0/16 ip4:8.18.102.200 ip4:8.18.102.198 include:_spf.google.com include:outlook.com include:spf.message.microsoft.com include:technolutions.net mx ?all"
+None		IN	TXT	"MS=ms22927527"
+None		IN	TXT	"URu4AGWOcDvKe4PwSDHvdS762TlVseaVc+du0jd4Gv3vIq0YI3VUuJ/6eTiiAxqSEfU4P7imWQeO7jWKqboZ/g=="
+; EOF

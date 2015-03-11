@@ -1,0 +1,19 @@
+; Zone File for indomco.hk
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	indom10.indomco.com.
+		IN	NS	indom130.indomco.org.
+		IN	NS	indom30.indomco.fr.
+		IN	NS	indom20.indomco.net.
+		IN	MX	None indomco.hk
+None		IN	A	202.157.180.150
+None		IN	A	87.237.189.4
+; EOF

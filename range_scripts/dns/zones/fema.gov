@@ -1,0 +1,27 @@
+; Zone File for fema.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	asia2.akam.net.
+		IN	NS	usc2.akam.net.
+		IN	NS	usw4.akam.net.
+		IN	NS	usw3.akam.net.
+		IN	NS	asia3.akam.net.
+		IN	NS	eur2.akam.net.
+		IN	NS	use3.akam.net.
+		IN	NS	use1.akam.net.
+		IN	MX	None fema.gov
+None		IN	A	172.229.4.56
+None		IN	A	173.252.133.166
+None		IN	CNAME	www.fema.gov.edgekey.net.
+None		IN	TXT	"v=msv1" "t=67143E11-2ACB-4C50-9863-CFBD22611C10"
+None		IN	TXT	"v=spf1 a:server202.fema.gov a:server201.fema.gov a:lyris.fema.gov a:mail.us.messaging.microsoft.com include:dhs.gov ~all"
+None		IN	TXT	"v=spf1" "include:spf.protection.outlook.com" "-all"
+; EOF

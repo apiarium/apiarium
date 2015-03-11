@@ -1,0 +1,28 @@
+; Zone File for navy.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	upbd0fda01.csd.disa.mil.
+		IN	NS	guv10m02.mont.disa.mil.
+		IN	NS	utindo02.csd.disa.mil.
+		IN	NS	upbd0fda02.csd.disa.mil.
+		IN	NS	uphb0fda05.csd.disa.mil.
+		IN	NS	uphb0fda06.csd.disa.mil.
+		IN	NS	guv10m01.mont.disa.mil.
+		IN	MX	None navy.mil
+		IN	MX	None navy.mil
+		IN	MX	None navy.mil
+		IN	MX	None navy.mil
+		IN	MX	None navy.mil
+None		IN	A	23.67.61.146
+None		IN	A	23.67.61.185
+None		IN	CNAME	www.navy.mil.edgesuite.net.
+None		IN	TXT	"v=spf1 include:spf_a.navy.mil include:spf_b.navy.mil include:_spf.eemsg.mail ~all"
+; EOF

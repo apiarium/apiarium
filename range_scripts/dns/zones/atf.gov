@@ -1,0 +1,21 @@
+; Zone File for atf.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-jdcw-02.usdoj.gov.
+		IN	NS	ns-jdcd-01.usdoj.gov.
+		IN	NS	ns-jdcw-01.usdoj.gov.
+		IN	NS	ns-jdcd-02.usdoj.gov.
+		IN	MX	None atf.gov
+None		IN	A	54.235.186.172
+None		IN	A	54.243.163.90
+None		IN	A	149.101.29.141
+None		IN	CNAME	dualstack.mc-4071-273355444.us-east-1.elb.amazonaws.com.
+; EOF

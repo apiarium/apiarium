@@ -1,0 +1,21 @@
+; Zone File for stratcom.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	kingfisher2.stratcom.mil.
+		IN	NS	kingfisher1.stratcom.mil.
+		IN	MX	None stratcom.mil
+		IN	MX	None stratcom.mil
+		IN	MX	None stratcom.mil
+		IN	MX	None stratcom.mil
+None		IN	A	143.250.4.35
+None		IN	A	143.250.4.75
+None		IN	A	143.250.3.75
+; EOF

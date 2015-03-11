@@ -1,0 +1,32 @@
+{% extends "parent_template.html" %}
+{% set active_page = "inject" %}
+
+{% block title %}Inject - {{inject.iId}}{% endblock %}
+
+{% block body %}
+{#
+    iId = None
+    iState = None
+    bFromActor = None
+    sConfig = None
+    sDestriction = None
+#}
+<center>
+<table class="table">
+<tr>
+    <td>Id: </td><td>{{inject.iId}}</td>
+</tr>
+    <td>State: </td><td>{{inject.iState}}</td>
+</tr>
+    <td>From Actor: </td><td>{{inject.bFromActor}}</td>
+</tr>
+    <td>Config: </td><td>{{inject.sConfig}}</td>
+</tr>
+    <td>Destriction: </td><td>{{inject.sDestriction}}</td>
+</tr>
+</table>
+</center>
+
+{% endblock %}
+
+

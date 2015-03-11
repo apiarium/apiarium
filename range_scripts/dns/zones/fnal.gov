@@ -1,0 +1,28 @@
+; Zone File for fnal.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.fnal.gov.
+		IN	NS	ns1.es.net.
+		IN	NS	ns-aoa.es.net.
+		IN	NS	ns-lvk.es.net.
+		IN	NS	ns2.fnal.gov.
+		IN	MX	None fnal.gov
+None		IN	A	131.225.105.231
+None		IN	A	131.225.105.231
+None		IN	A	131.225.105.230
+None		IN	A	131.225.105.230
+None		IN	A	198.49.208.71
+None		IN	A	198.49.208.70
+None		IN	CNAME	expwww17.fnal.gov.
+None		IN	CNAME	expwww17.fnal.gov.
+None		IN	CNAME	www1.fnal.gov.
+None		IN	TXT	"v=spf1 ip4:131.225.105.24 ip4:131.225.199.27 ip4:131.225.199.28 ip6:2620:6a:0:105::105:24 ip6:2620:6a:0:1213::199:27 ip6:2620:6a:0:1213::199:28 -all"
+; EOF

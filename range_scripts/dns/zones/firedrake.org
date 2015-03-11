@@ -1,0 +1,19 @@
+; Zone File for firedrake.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.firedrake.org.
+		IN	NS	ns1.firedrake.org.
+		IN	MX	None firedrake.org
+		IN	MX	None firedrake.org
+None		IN	A	193.201.200.77
+None		IN	A	193.201.200.77
+None		IN	A	78.46.68.84
+; EOF

@@ -1,0 +1,23 @@
+; Zone File for apollogrp.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	aqipns56.apollogrp.edu.
+		IN	NS	aqipns531.apollogrp.edu.
+		IN	NS	aqipns51.apollogrp.edu.
+		IN	MX	None apollogrp.edu
+None		IN	A	74.120.224.121
+None		IN	A	209.180.79.101
+None		IN	A	204.17.31.200
+None		IN	A	198.22.89.149
+None		IN	A	206.169.235.209
+None		IN	TXT	"MS=ms81980844"
+None		IN	TXT	"v=spf1 ip4:204.17.31.150  include:spf.protection.outlook.com ~all"
+; EOF

@@ -1,0 +1,21 @@
+; Zone File for awsdns-51.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-179.awsdns-51.org.
+		IN	NS	g-ns-757.awsdns-51.org.
+		IN	NS	g-ns-1078.awsdns-51.org.
+		IN	NS	g-ns-1651.awsdns-51.org.
+None		IN	A	205.251.197.152
+None		IN	A	205.251.192.179
+None		IN	A	205.251.194.245
+None		IN	A	205.251.196.54
+None		IN	A	205.251.198.115
+; EOF

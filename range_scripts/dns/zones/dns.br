@@ -1,0 +1,29 @@
+; Zone File for dns.br
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	c.dns.br.
+		IN	NS	f.dns.br.
+		IN	NS	d.dns.br.
+		IN	NS	a.dns.br.
+		IN	NS	e.dns.br.
+		IN	NS	b.dns.br.
+		IN	MX	None dns.br
+		IN	MX	None dns.br
+None		IN	A	200.192.232.53
+None		IN	A	200.160.0.5
+None		IN	A	200.192.233.10
+None		IN	A	200.219.159.10
+None		IN	A	200.219.154.10
+None		IN	A	200.160.0.10
+None		IN	A	200.229.248.10
+None		IN	A	200.189.41.10
+None		IN	TXT	"v=spf1 mx -all"
+; EOF

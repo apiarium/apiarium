@@ -1,0 +1,27 @@
+; Zone File for co.za
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.coza.net.za.
+		IN	NS	coza1.dnsnode.net.
+		IN	NS	ns.coza.net.za.
+		IN	NS	ns4.iafrica.com.
+		IN	NS	ns0.neotel.co.za.
+		IN	NS	ns0.is.co.za.
+		IN	MX	None co.za
+		IN	MX	None ns1.mweb.co.za
+		IN	MX	None ns2.mweb.co.za
+		IN	MX	None co.za
+None		IN	A	196.2.16.3
+None		IN	A	196.2.46.254
+None		IN	A	206.223.136.173
+None		IN	A	41.160.0.4
+None		IN	A	196.4.160.17
+; EOF

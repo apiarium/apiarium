@@ -1,0 +1,139 @@
+{% extends "parent_template.html" %}
+{% set active_page = "dashboard" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block body %}
+
+<!-- 
+class Range(object):
+    def __init__(self):
+        self.state = States.UNKNOWN
+        self.errorString = ""
+
+        self.rangeName = ""
+        self.clients = list()
+        self.c2Interface = ""
+        self.clientInterface = ""
+        self.c2ExternalIP = ""
+        self.c2InternalIP = 0
+        self.c2InternalPort = ""
+        self.c2IPPool = []
+        self.aliasInfo = []
+
+class Client(object):
+    def __init__(self):
+        self.ip = ""    # The ip we connect to it via (eth0 on the docker instance)
+        self.intIP = "" # The ip in the range (eth1 on the docker instance)
+        self.hostname = ""
+        self.mac = ""
+        self.injects = []
+        self.state = States.UNKNOWN
+        self.errorString = ""
+        self.dSID = ""
+
+class Inject(object):
+    def __init__(self, modname=""):
+        self.target = ""
+        self.id = id(self)
+        self.rangeC2Inject = RangeC2Inject()
+        self.clientInject  = ClientInject()
+        
+        self.moduleFile = ModuleFile()
+        self.moduleFile.name = modname
+
+        self.response = ""
+        
+        if self.moduleFile.name != "":
+            self.moduleFile.name = self.getHumanName()
+class ClientInject(object):
+    def __init__(self):
+        self.args = []
+        self.pid = 0
+        self.errorString = ""
+        self.state = States.UNKNOWN
+-->
+
+<div id="rangeDashboard">
+</div>
+
+<center>
+    <label><input id="reload" type="checkbox" name="reload" value="reload" checked>Reload Automatically</label>
+</center>
+
+<script>
+
+function GetButtonData(e){
+    var b = e.target;
+    $(b).attr('disabled','disabled');
+    var id = $(b).attr('data-id');
+    var range = $(b).attr('data-range');
+    var client = $(b).attr('data-client');
+    var data = {id: id, range: range, client: client};
+    console.log(data);
+    return data;
+}
+
+function ButtonSubmit(endpoint, evt){
+    var data = GetButtonData(evt);
+    $.ajax({
+      url:endpoint,
+      type:"POST",
+      data:data,
+      success: function(data){
+          console.log(data);
+      }});
+}
+
+function RemoveButtonClicked(e){
+    ButtonSubmit('/injects/remove', e);
+    return false;
+}
+
+function StopButtonClicked(e){
+    ButtonSubmit('/injects/stop', e);
+    return false;
+}
+
+function RemoveTrafficButtonClicked(e){
+    ButtonSubmit('/injects/removetraffic', e);
+    return false;
+}
+
+function StopTrafficButtonClicked(e){
+    ButtonSubmit('/injects/stoptraffic', e);
+    return false;
+}
+
+function reloadContents(){
+    $.get('/dashboard_content', function(data){
+        // put the html in place
+        $('#rangeDashboard').html(data);
+
+        // remake the popovers
+        $('.popoverTrigger').popover();
+
+        // remake the stop buttons
+        $('#stopButton.btn').unbind('click').click(StopButtonClicked);
+        $('#removeButton.btn').unbind('click').click(RemoveButtonClicked);
+        $('#stopTrafficButton.btn').unbind('click').click(StopTrafficButtonClicked);
+        $('#removeTrafficButton.btn').unbind('click').click(RemoveTrafficButtonClicked);
+        $('#cleanupButton.btn').unbind('click').click(RemoveButtonClicked);
+    });
+}
+
+reloadContents();
+
+setInterval(function(){
+    if($('.popover').hasClass('in')){
+        // popover is visable
+    } else {
+        if( $('#reload').is(':checked') ) {
+            // popover is not visable and the checkbox is checked
+            reloadContents();
+        }
+    }
+}, 5000);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{#
+IN:
+    ranges
+#}
+
+{% for r in ranges %}
+    <div class="col-md-3 col-sm-3">
+        <div class="panel panel-{{ stateToColorName(r.state)[0] }}">
+            <div class="panel-heading popoverTrigger" href="#" data-content="{{ r.errorString }}" rel="popover" data-placement="bottom" data-original-title="Range Details" data-trigger="hover">
+                <span class="badge pull-right">{{ length(r.clients) }}</span>
+                <h3 class="panel-title">{{ r.rangeName }}</h3>
+            </div>
+            <div class="panel-body">
+                <p>Range IP: {{ r.c2ExternalIP }}</p>
+                <table class="table table-condensed table-hover">
+                {% for i in r.injects %}
+                    <tr title="{{i.args}}">
+                        <td style="vertical-align:bottom"><p class="text-center">{{ i.name }}</p></td>
+                        <td style="vertical-align:bottom">
+                                {% if i.pid != 0%}
+                                    <input id="stopButton" type="button" class="btn btn-danger" data-id="{{i.id}}" data-range="{{r.rangeName}}" data-client="" value="Stop"></input>
+                                {% else %}
+                                    <input id="removeButton" type="button" class="btn btn-warning" data-id="{{i.id}}" data-range="{{r.rangeName}}" data-client="" value="Remove"></input>
+                                {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                {% set count = [] %}
+                {% for c in r.clients %}
+                    {% for i in c.injects if "Traffic" not in i.name %}
+                        <tr title="{{i.args}}">
+                            <td style="vertical-align:bottom"><p class="text-center">{{ i.name }}</p></td>
+                            <td style="vertical-align:bottom"><p class="text-center">{{ i.workstation }}</p></td>
+                            <td style="vertical-align:bottom">
+                                {% if i.pid != 0 %}
+                                    <input id="stopButton" type="button" class="btn btn-danger" data-id="{{i.id}}" data-range="{{r.rangeName}}" data-client="{{c.hostname}}" value="Stop"></input>
+                                {% else %}
+                                    <input id="removeButton" type="button" class="btn btn-warning" data-id="{{i.id}}" data-range="{{r.rangeName}}" data-client="{{c.hostname}}" value="Remove"></input>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        {% if not count and i.name %}
+                            {% if count.append(1) %}{% endif %}
+                            <tr title="{{i.args}}">
+                                <td style="vertical-align:bottom"><p class="text-center">{{ i.name }}</p></td>
+                                <td style="vertical-align:bottom"><p class="text-center"> * </p></td>
+                                <td style="vertical-align:bottom">
+                                    {% if i.pid != 0 %}
+                                        <input id="stopTrafficButton" type="button" class="btn btn-danger" data-range="{{r.rangeName}}" data-client="{{c.hostname}}" value="Stop"></input>
+                                    {% else %}
+                                        <input id="removeTrafficButton" type="button" class="btn btn-warning" data-range="{{r.rangeName}}" data-client="{{c.hostname}}" value="Remove"></input>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </table>
+            {% if length(r.clients) > 0 %}
+                <center>
+                    <input id="cleanupButton" type="button" class="btn btn-danger" data-id="" data-range="{{r.rangeName}}" data-client="" value="Cleanup Range"></input>
+                </center>
+            {% endif %}
+
+            </div> <!-- end panel-body -->
+        </div>
+    </div>
+{% endfor %}
+
+<center><p>Last update: {{ time() }}</p></center>
+

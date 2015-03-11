@@ -1,0 +1,1 @@
+dig +nocmd +nocomments +noqr +noquestion +nostats ANY $1 

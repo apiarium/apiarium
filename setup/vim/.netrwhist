@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/root/Desktop/cryptool/modules'
+let g:netrw_dirhist_2='/var/www/Buoy_v0.2/modules'
+let g:netrw_dirhist_3='/root/Desktop/zlib/examples'
+let g:netrw_dirhist_4='/root/.vim'
+let g:netrw_dirhist_5='/home/mike'
+let g:netrw_dirhist_6='/usr/share/vim/vim73/syntax'

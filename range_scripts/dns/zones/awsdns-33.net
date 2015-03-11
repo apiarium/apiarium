@@ -1,0 +1,21 @@
+; Zone File for awsdns-33.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1377.awsdns-33.net.
+		IN	NS	g-ns-1953.awsdns-33.net.
+		IN	NS	g-ns-482.awsdns-33.net.
+		IN	NS	g-ns-803.awsdns-33.net.
+None		IN	A	205.251.195.14
+None		IN	A	205.251.197.97
+None		IN	A	205.251.199.161
+None		IN	A	205.251.193.226
+None		IN	A	205.251.195.35
+; EOF

@@ -1,0 +1,50 @@
+/************************************************************************************************************************************************
+	* AUTHORS: Jonathan Miller, O-2; Nathaniel Hart, O-1; Katie Tiedemann, O-1
+	* CREATION DATE: 22 August 2013
+	* PAGE NAME: style.css
+	* DESCRIPTION: 
+	* 	Original Intent: Overrides styls from bootstrap.css. Used so that we know what changes we have made.
+*************************************************************************************************************************************************/
+body { padding-top: 70px; }
+
+.row {
+    margin-right: 0px;
+    margin-left:  0px;
+}
+
+.hiddenCheckboxColumn { display: none; } 
+
+.clickRow:hover {
+    cursor: pointer;
+	background-color: #ffff00;
+}
+
+.VMRange.activated:hover{
+    z-index: 2;
+	color: #b0b0b0;
+}
+
+.VMRange.activated:focus ,
+.VMRange.activated {
+	color: #ffffff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+
+.red {
+    color: red;
+}
+
+.green{
+    color: green;
+}
+
+.yellow{
+    color: yellow;
+}
+
+.activated {
+	color: #ffffff;
+    background-color: #428bca;
+    border-color: #428bca;
+}

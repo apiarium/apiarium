@@ -1,0 +1,15 @@
+; Zone File for ipcop.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	MX	None ipcop.org
+None		IN	A	216.34.181.97
+None		IN	CNAME	vhost.sourceforge.net.
+; EOF

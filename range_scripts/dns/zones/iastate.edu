@@ -1,0 +1,20 @@
+; Zone File for iastate.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	isu.dns.northernlights.gigapop.net.
+		IN	NS	dns-1.iastate.edu.
+		IN	NS	dns-2.iastate.edu.
+		IN	MX	None iastate.edu
+None		IN	A	129.186.88.249
+None		IN	A	129.186.1.99
+None		IN	A	129.186.6.249
+None		IN	TXT	"v=spf1 ip4:129.186.0.0/16 include:_spf.google.com include:spf.protection.outlook.com ?all"
+; EOF

@@ -1,0 +1,29 @@
+; Zone File for arin.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	v.arin.net.
+		IN	NS	ns2.arin.net.
+		IN	NS	u.arin.net.
+		IN	NS	ns1.arin.net.
+		IN	MX	None arin.net
+		IN	MX	None arin.net
+		IN	MX	None arin.net
+		IN	MX	None arin.net
+None		IN	A	199.43.0.44
+None		IN	A	199.43.0.43
+None		IN	A	192.149.252.125
+None		IN	A	192.149.252.124
+None		IN	A	199.212.0.53
+None		IN	A	63.243.194.2
+None		IN	A	199.71.0.108
+None		IN	A	204.61.216.50
+None		IN	A	199.212.0.108
+; EOF

@@ -1,0 +1,27 @@
+; Zone File for berkeley.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	adns2.berkeley.edu.
+		IN	NS	adns1.berkeley.edu.
+		IN	NS	phloem.uoregon.edu.
+		IN	NS	ns.v6.berkeley.edu.
+		IN	NS	aodns1.berkeley.edu.
+		IN	NS	aodns2.berkeley.edu.
+		IN	NS	sns-pb.isc.org.
+		IN	MX	None berkeley.edu
+None		IN	A	128.32.136.14
+None		IN	A	128.32.136.3
+None		IN	A	169.229.216.200
+None		IN	A	128.32.136.6
+None		IN	A	192.35.225.133
+None		IN	A	128.253.35.148
+None		IN	TXT	"v=spf1 ip4:169.229.218.128/25 ip6:2607:F140:0:1000::/64 ip4:192.58.221.140/30 ip4:192.58.221.144/30 include:outboundmail.convio.net include:spf.kimbia.com include:_spf.google.com ~all"
+; EOF

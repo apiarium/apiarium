@@ -1,0 +1,26 @@
+; Zone File for ucsc.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns.zocalo.net.
+		IN	NS	adns1.ucsc.edu.
+		IN	NS	sns-pb.isc.org.
+		IN	NS	adns2.ucsc.edu.
+		IN	NS	dns.princeton.edu.
+		IN	MX	None ucsc.edu
+		IN	MX	None ucsc.edu
+		IN	MX	None ucsc.edu
+		IN	MX	None ucsc.edu
+		IN	MX	None ucsc.edu
+None		IN	A	128.114.100.100
+None		IN	A	128.114.100.200
+None		IN	A	128.114.109.5
+None		IN	TXT	"v=spf1 mx include:_spf.google.com ip4:128.114.0.0/16 ip4:206.107.46.254 ?all"
+; EOF

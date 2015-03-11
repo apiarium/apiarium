@@ -1,0 +1,23 @@
+; Zone File for awsdns-00.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1027.awsdns-00.org.
+		IN	NS	g-ns-706.awsdns-00.org.
+		IN	NS	g-ns-128.awsdns-00.org.
+		IN	NS	g-ns-1600.awsdns-00.org.
+None		IN	A	205.251.196.1
+None		IN	A	205.251.196.7
+None		IN	A	205.251.196.3
+None		IN	A	205.251.194.194
+None		IN	A	205.251.192.128
+None		IN	A	205.251.198.64
+None		IN	A	205.251.196.6
+; EOF

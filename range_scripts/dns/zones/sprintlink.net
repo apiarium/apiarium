@@ -1,0 +1,21 @@
+; Zone File for sprintlink.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns2-auth.sprintlink.net.
+		IN	NS	ns1-auth.sprintlink.net.
+		IN	NS	ns3-auth.sprintlink.net.
+		IN	MX	None sprintlink.net
+None		IN	A	144.228.254.10
+None		IN	A	144.228.255.10
+None		IN	A	206.228.179.10
+None		IN	A	208.24.22.50
+None		IN	TXT	"v=spf1 ip4:199.0.234.34 ip4:199.0.233.8 ip4:199.0.233.7 ip4:199.0.233.13 ip4:208.24.22.134 ip4:208.24.22.135 ip4:208.24.22.136 mx ~all"
+; EOF

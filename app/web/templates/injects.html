@@ -1,0 +1,118 @@
+{#
+IN:
+    injects
+    ranges
+#}
+
+{% extends "parent_template.html" %}
+{% set active_page = "injects" %}
+
+{% block title %}Injects{% endblock %}
+
+{% block body %}
+
+<!--
+class Module():
+    def getInjectClass(self):
+    def isRange(self):
+    def isClient(self):
+    def getOtherVars(self):
+    def getName(self):
+    def getHTMLName(self):
+    def getDesc(self):
+-->
+
+<div class="col-md-4">
+<div id="rangePicker" class="panel panel-default">
+    <div class="panel-heading"><h5 class="panel-title">Select one or more ranges</h5></div>
+    <div class="panel-body">
+        <div class="list-group">
+            {% for r in ranges %}
+                {% if r.errorString == "" %}
+                    <a href="#{{r.rangeName}}" id="rangePicker" class="list-group-item range" data-toggle="tab">
+                        <h6 class="list-group-item-heading">{{r.rangeName}}</h6>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div class="col-md-4">
+<div class="panel panel-default">
+    <div class="panel-heading"><h5 class="panel-title">Select an inject</h5></div>
+    <div class="panel-body">
+        <div id="injectPicker"  class="list-group">
+            {% for r in injects | sort(attribute='__getname__') %}
+                <a href="#{{r.getHTMLName()}}" id="list-group-item-id" class="list-group-item inject" data-toggle="tab">
+                    <h4 class="list-group-item-heading">{{r.getName()}}</h4>
+                    <p class="list-group-item-text">{{r.getDesc()}}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<div id="optionPicker" class="col-md-4" >
+    <!-- Dynamically generated options (from /inject/form/<inject>) -->
+</div><!-- end option picker -->
+<h3 id="loading" class="text-center text-info" style="display: none;padding-top:2em">Loading...</h3>
+
+
+<script>
+    $('.btn').button();
+
+    // create a click listener for all of the tab lists
+    function refreshInjectForm(e){
+        if(e){
+            if( $(e.currentTarget).hasClass('range') ){
+                // range picker
+                if( $(e.currentTarget).hasClass('active') ){
+                    // uncheck it
+                    $(e.currentTarget).removeClass('active');
+                } else {
+                    // check it
+                    $(e.currentTarget).addClass('active');
+                }
+            } else {
+                // inject picker, make it the only active one as they are mutually exclusive
+                $(e.currentTarget).addClass('active').siblings().removeClass('active');
+            }
+        }
+
+        // Get the inject's name
+        var injectname = $('.inject.active').attr('href');
+        injectname = injectname.replace('#', '');
+
+        // get a list of the range names
+        var checkedRanges = $('.range.active').map(function(a,b){
+            return $(b).attr('href').replace('#','');
+        }).get();
+
+        // do a get request to fill in the third category
+        if(checkedRanges.length > 0 && injectname.length > 0){
+            $('#optionPicker').hide();
+            $('#loading').show();
+            $("html, body").animate({ scrollTop: 0 }, "fast");
+            //$('#optionPicker').html();
+            $.get('/injects/form/'+injectname,
+                  {'checkedRanges': checkedRanges},
+                  function(data){
+                     $('#optionPicker').html(data).show('slow');
+                     $('#loading').hide();
+            });
+        }
+    }
+
+    $('[data-toggle="tab"]').click(refreshInjectForm);
+</script>
+
+
+{% endblock %}
+
+

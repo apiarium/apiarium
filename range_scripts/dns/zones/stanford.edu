@@ -1,0 +1,37 @@
+; Zone File for stanford.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	atalante.stanford.edu.
+		IN	NS	aerathea.stanford.edu.
+		IN	NS	avallone.stanford.edu.
+		IN	NS	argus.stanford.edu.
+		IN	MX	None stanford.edu
+		IN	MX	None stanford.edu
+		IN	MX	None stanford.edu
+		IN	MX	None stanford.edu
+None		IN	A	171.67.24.236
+None		IN	A	171.67.215.200
+None		IN	A	171.67.215.200
+None		IN	A	171.64.192.68
+None		IN	A	134.79.196.165
+None		IN	A	171.64.7.61
+None		IN	A	152.3.104.250
+None		IN	A	171.64.7.88
+None		IN	A	171.64.7.115
+None		IN	A	134.79.197.200
+None		IN	CNAME	ucomm-prod1.stanford.edu.
+None		IN	CNAME	www-v6.stanford.edu.
+None		IN	CNAME	drupal-prod.slac.stanford.edu.
+None		IN	CNAME	www1.slac.stanford.edu.
+None		IN	TXT	"bwZknJMLNV1XuaJAyUmKlAFrdZo+p5yDlTNACmDUWhgtyihfJc8oWMnK7hWLreN+ozU3mX91yHHzZx0adJPPPg=="
+None		IN	TXT	"v=spf1 ip4:171.67.219.64/27 ip4:171.67.224.0/28 ip4:171.67.214.160/27 ip4:171.67.216.240/28 ip4:171.67.43.137 ip4:171.67.43.138 ip4:171.67.43.139 ip4:171.67.43.140 ip4:171.67.43.141 " "include:_spf.google.com include:_spf.qualtrics.com include:icpbounce.com ?all"
+None		IN	TXT	"blitz=mu-0e24b17b-23dce65a-c0b14b75-e742cd66"
+; EOF

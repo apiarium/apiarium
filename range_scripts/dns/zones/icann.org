@@ -1,0 +1,28 @@
+; Zone File for icann.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	c.iana-servers.net.
+		IN	NS	b.iana-servers.net.
+		IN	NS	ns.icann.org.
+		IN	NS	a.iana-servers.net.
+		IN	MX	None icann.org
+		IN	MX	None icann.org
+		IN	MX	None icann.org
+		IN	MX	None icann.org
+		IN	MX	None icann.org
+		IN	MX	None icann.org
+None		IN	A	192.0.32.7
+None		IN	A	192.0.43.7
+None		IN	A	199.4.138.53
+None		IN	CNAME	www.vip.icann.org.
+None		IN	TXT	"v=spf1 include:_spf.icann.org -all"
+None		IN	TXT	"$Id: icann.org 3278 2014-12-09 19:45:31Z spowell $"
+; EOF

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<!--************************************************************************************************************************************************
+    * AUTHORS: Jonathan Miller, O-2; Nathaniel Hart, O-1; Katie Tiedemann, O-1
+    * CREATION DATE: 22 August 2013
+    * PAGE NAME: index.html
+    * DESCRIPTION: 
+    *   Original Intent: Home page for Ephor C2 interface. Displays running ranges, provides details about the range, and injects currently
+    *   running on each range. Includes a navigation bar header. This page is designed with the intent of displaying information rather
+    *   than being an interactive page. The only interactive objects on the page are the details button for displaying range information, 
+    *   the details pop up for inject information when a user clicks on an inject, and the stop inject button. 
+*************************************************************************************************************************************************-->
+
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>Ephor - Status</title>
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="all">
+        <link href="style.css" rel="stylesheet" media="all">
+    </head>
+<body>
+    <div id="content">
+
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html" title="The ephors (from the Greek for 'on' or 'over' and the Greek word for 'to see'; i.e. 'one who oversees') were leaders of ancient Sparta and shared power with the Spartan kings.">Ephor C2</a>
+            </div>   
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="index.html">Status</a></li>
+                    <li><a href="injects.html">Injects</a></li>
+                    <!-- <li><a href="interact.html">Interact</a></li> -->
+                </ul>
+                <div class="navbar-right">
+                    <p id="lastUpdate" class="navbar-text"></p>
+                </div>
+            </div>
+        </nav>
+
+    <!-- Status panels displayed here (loaded dynamically via ajax) -->
+    </div> <!-- end content -->
+<!--rsr - this is interfering with dynamic content, and I don't know enough html to fix it 
+
+    <div id="footer">
+        <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+            <div class="navbar-footer">
+                <p> Inject Icon Descriptions: </p>
+                <span class="glyphicon glyphicon-ok-sign green"></span> Inject is running.<br>
+                <span class="glyphicon glyphicon-minus-sign red"></span> Inject is not running.<br>
+                <span class="glyphicon glyphicon-question-sign black"></span> Inject is not running on this service. No error.
+            </div>
+        </nav>
+    </div>
+-->
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/tooltip.js"></script> 
+    <script type="text/javascript" src="js/bootbox.js"></script>
+    
+    <script>
+    $.ajaxSetup({
+        // Disable caching of AJAX responses
+        cache: false
+    });
+    
+    /** loadDashboard()
+        * Displays the clients, grouped by range, in bootstrap tile format on the homepage. Each tile is colored based on the status of the range, (RUNNING, STOPPED, WAITING, UNKNOWN, ERROR).
+        * The tile then displays range information followed by a table listing of the clients with injects running on them. Displays IP address, inject type, inject status, and an inject
+        * stop button. 
+    */
+    function loadDashboard(){
+        var data = '';
+        var client_length = 0;
+        
+        /** 
+            * Grab the json data from the server
+        */
+        $.get('json', function(data) {
+            // Remove all the old things
+            $('.row').remove();
+
+            // Grid layout of ranges
+            newRows = '';
+
+            /** 
+            * Get each range out of the json data. 
+            */
+            $.each(data, function(range_index, rangeC2) {
+                // New row logic
+                newPanel = '';
+                if(range_index % config.statusHorizPanels == 0){
+                    newPanel += '<div class="row">';
+                }
+                // Find the number of clients
+                //client_length = rangeC2.clients.length;
+                client_length = rangeC2.clients.length;
+                $.each(rangeC2.clients, function(client_index, client) {
+                    // Dont show temporary range clients
+                    if(client.state == 5) {
+                        client_length -= 1;
+                    }
+                });
+                // Bootstrap panels to display each range
+                newPanel +=
+                '<div class="col-md-' + columnWidthSubstitution(config.statusHorizPanels) + '">' +
+                    // Set panel color
+                    '<div class="panel panel-' + stateToColorName(rangeC2.state)[0] + '">' +   
+                        '<div id="' + rangeC2.rangeName  + '" class="panel-heading popoverTrigger" href="#" data-content="' + rangeC2.errorString  + '" ';
+                            // If the range has a error create a popover. Popover populated line ~175
+                            if(rangeC2.errorString != ""){
+                                newPanel += 'rel="popover" data-placement="bottom" data-original-title="Range Details" data-trigger="hover"';
+                            }
+                            // Display title bar of range with a temporary range client
+                            if (rangeC2.clients.length - client_length > 0) {
+                               newPanel += '>' +
+                               '<h3 class="panel-title">' + rangeC2.rangeName + '<span class="badge pull-right">' + client_length + ' Clients, ' 
+                                  + (rangeC2.clients.length - client_length) + ' Range </span>' + '</h3>' + '</div>' + // end panel-heading
+                               '<div class="panel-body">' +
+                                  '<p>Range IP : ' + rangeC2.c2ExternalIP + '</p>' +
+                                  '<br>' +
+                                  '<table class="table table-hover">';
+                            // Display title bar of a range with no temp clients
+                            } else {
+                               newPanel += '>' +
+                               '<h3 class="panel-title">' + rangeC2.rangeName + '<span class="badge pull-right">' + client_length + ' Clients</span>' + 
+                                   '</h3>' + '</div>' + // end panel-heading
+                               '<div class="panel-body">' +                                             
+                                  '<p>Range IP : ' + rangeC2.c2ExternalIP + '</p>' +
+                                  '<br>' +
+                                  '<table class="table table-hover" style="width:50">';
+                            }
+                            /** 
+                            * Get each client from the range. 
+                            */
+                            $.each(rangeC2.clients, function(client_index, client) { 
+                                // Only show clients that have more than 0 injects running in the table.
+                                if(client.injects.length > 0) {
+                                    newPanel += '<tr><td rowspan="' + (client.injects.length+1).toString() + '">' + client.ip + '</td></tr>';
+                                }
+                                function getGlyphiconForState(state){
+                                    switch(state){
+                                        case 0:
+                                        return "glyphicon glyphicon-ok-sign";
+                                        break;
+                                        case 1:
+                                        return "glyphicon glyphicon-minus-sign";
+                                        break;
+                                    }
+                                    return "glyphicon glyphicon-question-sign";
+                                }
+                                /** 
+                                * Get each inject running on the range. 
+                                */
+                                $.each(client.injects, function(injects_index, inject) {
+                                     //if(injects_index != 0) newPanel += '<tr>';
+                                     newPanel += '<tr class="clickRow" data-json="'+JSON.stringify(inject).replace(/'/g,'\\"').replace(/"/g,"'")+'">';
+                                     newPanel += '<td>' + inject.humanName + '</td>' +
+                                         '<td style="white-space:nowrap">' +
+                                             '<span title="WebC2 Status" style="color:'+stateToColorName(inject.webC2Inject.state)[2] + 
+                                                 '" class="'+ getGlyphiconForState(inject.webC2Inject.state) +'">&thinsp; </span>' +
+                                             '<span title="RangeC2 Status" style="color:'+stateToColorName(inject.rangeC2Inject.state)[2] + 
+                                                 '" class="'+ getGlyphiconForState(inject.rangeC2Inject.state) +'">&thinsp; </span>' +
+                                             '<span title="Client Status" style="color:'+stateToColorName(inject.clientInject.state)[2] + 
+                                                 '" class="'+ getGlyphiconForState(inject.clientInject.state) +'">&thinsp; </span>' +
+                                         '</td>' +
+                                         '<td><a class="close stopInject" data-id="'+inject.id+'" data-target="'+inject.target+'">x</a></tr>';
+                                         '</tr>';
+                                });
+                            newPanel += '</tr>';
+                            });
+                            newPanel += '</table>' +
+                            '<div class="btn-group">' +
+                                '<button class="detailsButton btn btn-default" data-content="' + JSON.stringify(rangeC2).replace(/'/g,'\\"').replace(/"/g,"'") + '">' +
+                                    '<span class="glyphicon glyphicon-transfer"></span> Details' +         
+                                '</button>' +           
+                                '<button class="rebootButton btn btn-default" data-range="'+rangeC2.rangeName+'">' +
+                                    '<span class="glyphicon glyphicon-trash"></span> Reboot' +         
+                                '</button>' +           
+                                '<button class="cleanupButton btn btn-default" data-range="'+rangeC2.rangeName+'">' +
+                                    '<span class="glyphicon glyphicon-trash"></span> Cleanup' +         
+                                '</button>' +           
+                            '</div>' +
+                        '</div>' + // end panel-body
+                    '</div>' + // end panel
+                '</div>'; // end column
+                
+                // End of row logic
+                if(range_index % config.statusHorizPanels == config.statusHorizPanels-1) {
+                    newPanel += '</div>';
+                }
+                
+                newRows += newPanel;
+            });
+            
+            // Add the content we just created
+            panelPage = $("#content");
+            panelPage.append(newRows);
+            
+            /** 
+             * Make all of the ranges into popovers
+            */
+            $.each(data, function(row_index, rangeC2){
+                $('#' + rangeC2.rangeName).popover();
+            });
+
+            /**
+             * Remove the top AJAX error banner if it exists
+             */
+            if($('.alert.alert-danger.ajaxError').length != 0){
+                $('.alert.alert-danger.ajaxError').fadeOut(function(){
+                    $(this).remove();
+                });
+            }
+
+            $('.cleanupButton').click(function(e){
+                var rangeName = $(e.target).data('range');
+                bootbox.dialog({
+                    message: "Would you like to cleanup all ranges, or just "+rangeName+"?",
+                    title: "Cleanup",
+                    buttons: {
+                        danger: {
+                            label: "All ranges",
+                            className: "btn-danger",
+                            callback: function() {
+                                $.post('/', {action: 'inject', option: 'cleanup'});
+                            }
+                        },
+                        main: {
+                            label: "Just "+rangeName,
+                            className: "btn-primary",
+                            callback: function() {
+                                $.post('/', {action: 'inject', option: 'cleanup', range: rangeName});
+                            }
+                        }
+                    }
+                });
+            });
+            
+            $('.rebootButton').click(function(e){
+                var rangeName = $(e.target).data('range');
+                bootbox.dialog({
+                    message: "Would you like to reboot all ranges, or just "+rangeName+"?",
+                    title: "Cleanup",
+                    buttons: {
+                        danger: {
+                            label: "All ranges",
+                            className: "btn-danger",
+                            callback: function() {
+                                $.each(data, function(range_index, rangeC2) {
+                                    $.post('/', {action: 'maint', option: 'rebootRange', target: rangeC2.rangeName});
+                                });
+                            }
+                        },
+                        main: {
+                            label: "Just "+rangeName,
+                            className: "btn-primary",
+                            callback: function() {
+                                $.post('/', {action: 'maint', option: 'rebootRange', target: rangeName});
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Set the time of the last update, upper right hand corner
+            $('#lastUpdate').text("Last update: "+getTimeString());
+
+            /**
+             ************************************************************************************************************************************************
+             * Make the click handlers for object created in loadDashboard()
+             ************************************************************************************************************************************************
+             */
+                
+            /** 
+             * Add a click function to pop up the detailed information about the range, clients and injects. 
+             */
+            $('.detailsButton').click(function(e){
+                row = $(this);
+                data = JSON.parse(row.data('content').replace(/'/g,'"'));
+                
+                // Create and populate the boot box object 
+                bootbox.dialog({
+                    message: "<pre>" + DumpObjectIndented(data) + "</pre>",
+                    title: data.rangeName + " Details",
+                    buttons: {},
+                    onEscape: function(){
+                        bootbox.hideAll();
+                    }
+                });
+            });
+            
+
+            /** 
+             * This is for the extra details about each inject. Creates a pop up dialog with all known information about the inject.
+             * Is triggered by a click on the row of the inject.
+            */
+            $('.clickRow').click(function(e){
+                row = $(this);
+                data = JSON.parse(row.data('json').replace(/'/g,'"').replace(/\n/g,'\\n').replace(/\t/g, '\\t'));
+                dlgMessage = "" + 
+                    'Unique ID: ' + data.id + 
+                    '</br>Name of module: ' + data.moduleFile.name + '.py' +
+                             '<dl>';
+                                 if(data.response.length > 0){
+                                     dlgMessage = dlgMessage + 
+                                     '<dt>Response:</dt>' + 
+                                     '<pre>' + data.response + '</pre>' +
+                                     '<br>';
+                                 }
+                                 dlgMessage = dlgMessage + 
+                                 '<dt>WebC2 Server:</dt>' + 
+                                 '<dd>Arguments: ' + DumpObjectIndented(data.webC2Inject.args).replace(/'[0-9]*' : /g,"") + '</dd>';
+                                 if(data.webC2Inject.errorString.length > 0){
+                                     dlgMessage = dlgMessage + 
+                                     '<dd>Error info: ' + data.webC2Inject.errorString + '</dd>';
+                                 }
+                                 dlgMessage = dlgMessage + 
+                                 '<dd>pid: ' + data.webC2Inject.pid + '</dd>' + 
+                                 '<dd>fd: ' + data.webC2Inject.fd + '</dd>' + 
+                                 '<dt>RangeC2 Server:</dt>' + 
+                                 '<dd>Arguments: ' + DumpObjectIndented(data.rangeC2Inject.args).replace(/'[0-9]*' : /g,"") + '</dd>';
+                                 if(data.rangeC2Inject.errorString.length > 0){
+                                     dlgMessage = dlgMessage + 
+                                     '<dd>Error info: ' + data.rangeC2Inject.errorString + '</dd>';
+                                 }
+                                 dlgMessage = dlgMessage + 
+                                 '<dd>pid: ' + data.rangeC2Inject.pid + '</dd>' + 
+                                 '<dt>Client:</dt>' + 
+                                 '<dd>Arguments: ' + DumpObjectIndented(data.clientInject.args).replace(/'[0-9]*' : /g,"") + '</dd>';
+                                 if(data.clientInject.errorString.length > 0){
+                                     dlgMessage = dlgMessage + 
+                                     '<dd>Error info: ' + data.clientInject.errorString + '</dd>';
+                                 }
+                                 dlgMessage = dlgMessage + 
+                                 '<dd>pid: ' + data.clientInject.pid + '</dd>' + 
+                             '</dl>' +
+                             '',
+                bootbox.dialog({
+                    message: dlgMessage,
+                    title: data.humanName + " running on " + data.target + " ("+data.id+")",
+                    buttons: {
+                        success: {
+                            label: "Restart",
+                            className: "btn-warning",
+                            callback: function() {
+                                row[0].children[1].innerHTML="restarting...";
+                            }
+                        },
+                        danger: {
+                            label: "Stop",
+                            className: "btn-danger",
+                            callback: function() {
+                                $.post('/',
+                                       { action: 'inject', option: 'stop', target: data.target, id: data.id},
+                                       function(data) {
+                                });
+                            }
+                        }
+                    },
+                    onEscape: function(){bootbox.hideAll();}
+                });
+            });
+
+            /** 
+            * Stop running the inject if the stopInject object is clicked.
+            */
+            $('.stopInject').click(function(e){
+                //$(this).parent().parent().children()[1].innerHTML="stopping...";
+                // Call the ajax remove functionality
+                var row = $(this);
+                $.post('/',
+                    { action: 'inject', option: 'remove', target: $(this).data().target, id: $(this).data().id},
+                    function(data){
+                        $(row).text('');
+                        $(row).addClass('glyphicon glyphicon-ban-circle');
+                });
+                e.stopPropagation();
+            });
+            
+        /** 
+        * If there is no JSON data passed from the server,  show and error.
+        */  
+        }).fail(function(){
+            // The GET request failed!
+            if($('.alert.alert-danger.ajaxError').length === 0){
+                // create the error div
+                error = '<div class="alert alert-danger ajaxError" style="margin: 0px 17px 17px 17px">Could not reach the webC2 server to refresh data since ';
+                error += getTimeString();
+                error += '.</div>';
+                $(error).hide().prependTo('#content').fadeIn();
+            }
+        });
+    }
+
+    /** 
+    * Get the time for keeping track of last update
+    */
+    function getTimeString(){
+        var retStr = "";
+        var d = new Date();
+        var h = d.getHours().toString();
+        if(h.length == 1){
+            h = '0'+h;
+        }
+        retStr += h+':';
+        var m = d.getMinutes().toString();
+        if(m.length == 1){
+            m = '0'+m;
+        }
+        retStr += m+':';
+        var s = d.getSeconds().toString();
+        if(s.length == 1){
+            s = '0'+s;
+        }
+        retStr += s;
+        return retStr;
+    }
+    
+    /** 
+    * Refresh ths dashboard every 5 seconds
+    */
+    setInterval(function(){
+        if($('.modal.fade.in').length === 0 && $('.popover.fade.bottom.in').length == 0){
+            //console.log("Refreshing content")
+            loadDashboard();
+        }
+    }, 5000);
+    
+    /** 
+    * Code that runs when page is first loaded. 
+    */
+    $(document).ready(function(){
+        loadDashboard();
+
+        /** 
+        * Hack to make a background click make the dialog go away
+        */
+        $(document).click(function(event) { 
+            if($('.bootbox').data('clicked') == undefined) {
+                $('.bootbox').data('clicked',1);
+            }
+            else if($('.bootbox').data('clicked') == 1) {
+                console.log($('.bootbox'));
+                bootbox.hideAll();
+            }
+        });
+    });
+    
+    setInterval(function(){
+        if($('.modal.fade.in').length === 0 && $('.popover.fade.bottom.in').length == 0){
+            console.log("Refreshing content")
+            loadDashboard();
+        }
+    }, 5000);
+
+</script>
+</body>
+</html>
+

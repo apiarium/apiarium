@@ -1,0 +1,32 @@
+; Zone File for irs.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns4.irs.gov.
+		IN	NS	ns1.irs.gov.
+		IN	NS	ns2.irs.gov.
+		IN	NS	ns3.irs.gov.
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+		IN	MX	None irs.gov
+None		IN	A	23.67.61.185
+None		IN	A	23.67.61.202
+None		IN	A	166.123.218.220
+None		IN	A	152.216.11.133
+None		IN	A	152.216.7.164
+None		IN	A	152.216.7.165
+None		IN	A	152.216.11.132
+None		IN	CNAME	www.edgeredirector.irs.akadns.net.
+None		IN	TXT	"v=spf1 mx ip4:152.216.0.0/20 ip6:2610:30::/32 include:qai.irs.gov -all"
+; EOF

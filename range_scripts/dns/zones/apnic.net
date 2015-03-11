@@ -1,0 +1,33 @@
+; Zone File for apnic.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	sec1.authdns.ripe.net.
+		IN	NS	ns1.apnic.net.
+		IN	NS	tinnie.apnic.net.
+		IN	NS	tinnie.arin.net.
+		IN	NS	ns4.apnic.net.
+		IN	NS	apnic1.dnsnode.net.
+		IN	NS	ns4.apnic.com.
+		IN	NS	sec1.apnic.net.
+		IN	NS	ns3.apnic.net.
+		IN	MX	None apnic.net
+		IN	MX	None apnic.net
+		IN	MX	None apnic.net
+None		IN	A	203.119.102.244
+None		IN	A	202.12.29.175
+None		IN	A	202.12.29.59
+None		IN	A	202.12.28.140
+None		IN	A	202.12.29.25
+None		IN	A	202.12.29.60
+None		IN	A	202.12.31.140
+None		IN	A	202.12.28.131
+None		IN	TXT	"v=spf1 mx ip4:202.12.29.0/24 ip4:203.89.255.141/32 ip4:203.190.232.30/32 ip4:54.252.177.71/32 ip4:54.252.177.62/32 ip6:2001:dc0:2001:a::55/128 include:mailsenders.netsuite.com include:google.com -all"
+; EOF

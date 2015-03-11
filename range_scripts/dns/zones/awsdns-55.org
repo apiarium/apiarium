@@ -1,0 +1,21 @@
+; Zone File for awsdns-55.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1655.awsdns-55.org.
+		IN	NS	g-ns-761.awsdns-55.org.
+		IN	NS	g-ns-183.awsdns-55.org.
+		IN	NS	g-ns-1082.awsdns-55.org.
+None		IN	A	205.251.197.190
+None		IN	A	205.251.198.119
+None		IN	A	205.251.194.249
+None		IN	A	205.251.192.183
+None		IN	A	205.251.196.58
+; EOF

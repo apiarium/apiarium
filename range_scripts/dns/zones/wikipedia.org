@@ -1,0 +1,20 @@
+; Zone File for wikipedia.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.wikimedia.org.
+		IN	NS	ns2.wikimedia.org.
+		IN	NS	ns1.wikimedia.org.
+		IN	MX	None wikipedia.org
+		IN	MX	None wikipedia.org
+None		IN	A	208.80.154.224
+None		IN	A	208.80.154.224
+None		IN	TXT	"google-site-verification=AMHkgs-4ViEvIJf5znZle-BSE2EPNFqM1nDJGRyn2qk"
+; EOF

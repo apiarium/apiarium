@@ -1,0 +1,26 @@
+; Zone File for cableone.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.cableone.net.
+		IN	NS	ns2.cableone.net.
+		IN	MX	None cableone.net
+		IN	MX	None cableone.net
+		IN	MX	None cableone.net
+		IN	MX	None cableone.net
+		IN	MX	None cableone.net
+None		IN	A	74.117.206.146
+None		IN	A	24.116.1.80
+None		IN	A	24.116.1.80
+None		IN	A	24.116.0.206
+None		IN	A	24.119.5.34
+None		IN	CNAME	cableone.custhelp.com.
+None		IN	TXT	"v=spf1 a:mail.paydq.com ip4:24.116.0.0/23 ip4:207.126.144.0/20 ip4:64.18.0.0/20 ip4:74.125.148.0/22 include:_spf.google.com ?all"
+; EOF

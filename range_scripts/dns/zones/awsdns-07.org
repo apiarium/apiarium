@@ -1,0 +1,21 @@
+; Zone File for awsdns-07.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1607.awsdns-07.org.
+		IN	NS	g-ns-1034.awsdns-07.org.
+		IN	NS	g-ns-135.awsdns-07.org.
+		IN	NS	g-ns-713.awsdns-07.org.
+None		IN	A	205.251.196.60
+None		IN	A	205.251.198.71
+None		IN	A	205.251.196.10
+None		IN	A	205.251.192.135
+None		IN	A	205.251.194.201
+; EOF

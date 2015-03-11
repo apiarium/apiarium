@@ -1,0 +1,17 @@
+; Zone File for llnwd.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	dns12.llnwd.net.
+		IN	NS	dns14.llnwd.net.
+		IN	MX	None llnwd.net
+None		IN	A	69.28.143.12
+None		IN	A	69.28.143.14
+; EOF

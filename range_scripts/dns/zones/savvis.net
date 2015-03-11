@@ -1,0 +1,30 @@
+; Zone File for savvis.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns6a.savvis.net.
+		IN	NS	ns3.savvis.net.
+		IN	NS	ns2.savvis.net.
+		IN	NS	ns1.savvis.net.
+		IN	NS	ns5.savvis.net.
+		IN	NS	ns6.savvis.net.
+		IN	NS	ns4.savvis.net.
+		IN	MX	None savvis.net
+		IN	MX	None savvis.net
+None		IN	A	209.83.162.35
+None		IN	A	209.16.211.42
+None		IN	A	204.71.116.25
+None		IN	A	204.194.10.206
+None		IN	A	204.70.49.234
+None		IN	A	216.182.211.27
+None		IN	A	212.124.226.231
+None		IN	A	212.124.226.230
+None		IN	TXT	"MS=ms76658934"
+; EOF

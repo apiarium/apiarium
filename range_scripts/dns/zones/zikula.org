@@ -1,0 +1,23 @@
+; Zone File for zikula.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.systemdns.com.
+		IN	NS	ns2.systemdns.com.
+		IN	NS	ns3.systemdns.com.
+		IN	MX	None zikula.org
+		IN	MX	None zikula.org
+		IN	MX	None zikula.org
+		IN	MX	None zikula.org
+		IN	MX	None zikula.org
+None		IN	A	68.68.100.130
+None		IN	TXT	"v=spf1 include:aspmx.googlemail.com a:rcs2.zikula.net a:translate.zikula.net ip4:68.68.100.128/25 ip4:67.202.109.31/32 ?all"
+None		IN	TXT	"google-site-verification=_Q98h1MCNyaSIiXqb5K4rST8wS8OSosTwYnkJBIXvlY"
+; EOF

@@ -1,0 +1,23 @@
+; Zone File for zocalo.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns4.zocalo.net.
+		IN	NS	ns.via.net.
+		IN	NS	ns2.via.net.
+		IN	NS	ns3.via.net.
+		IN	MX	None zocalo.net
+		IN	MX	None zocalo.net
+		IN	MX	None zocalo.net
+		IN	MX	None zocalo.net
+None		IN	A	157.22.0.254
+None		IN	A	206.251.184.30
+None		IN	A	128.114.129.105
+; EOF

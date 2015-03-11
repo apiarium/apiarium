@@ -1,0 +1,16 @@
+if [[ -f $1 ]] 
+then
+	if [[ -f $2 ]]
+	then
+		echo "ERROR: $2 exists and is a file"
+	else
+		if [[ -z "$2" ]]
+			then dest=webmirror
+			else dest=$2
+		fi 
+		httrack -w -%c0 -A500 -%L $1 -O $dest -F "Mozilla/5.0 (Windows Nt 6.1; rv:31.0) Gecko/20100101 Firefox/31.0" 
+	fi
+else
+	echo $0 - Mirrors a list of sites from a file - one per line.
+	echo "	Usage: $0 <list of sites to mirror> [<output directory>]"
+fi

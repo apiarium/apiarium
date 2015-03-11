@@ -1,0 +1,21 @@
+; Zone File for wikiversity.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.wikimedia.org.
+		IN	NS	ns1.wikimedia.org.
+		IN	NS	ns2.wikimedia.org.
+		IN	MX	None wikiversity.org
+		IN	MX	None wikiversity.org
+None		IN	A	208.80.154.224
+None		IN	A	208.80.154.224
+None		IN	A	208.80.154.224
+None		IN	TXT	"google-site-verification=V1cbBf_zxEHDRFykCf8YR6TlOvLA1h-5lmD5a8pKfBw"
+; EOF

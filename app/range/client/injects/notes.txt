@@ -1,0 +1,124 @@
+===================================
+INJECTS:
+===================================
+
+webc2 processing:
+ use vars(class()) to check for what it has
+  for each of them, check if they are:
+   OPTIONS
+   source_ip
+ use getattr(class(), 'range', False) to check if it's a range or client
+  if client:
+   grab the next workstation one
+  elif range:
+   grab the next malicious source ip
+
+------Range side------
+(All require random ip to run on)
+
+dmz port scan
+    =172.16.90.0/24
+vars:
+
+
+sql inject backdoor
+    =www.uct.jcor
+-BOTH TYPING AND BUILT-IN
+vars:
+
+
++sidewinder smtpservice dos
+    =1 hour
+    =mail.uct.jcor
+-change to be inbound (require source ip)
+vars:
+
+
++webserver port scan
+    =www.uct.jcor
+vars:
+
+
++website deface
+    =robots.txt, login.aspx, exploit
+vars:
+
+
+------Client side------
+(All require random workstation to run on)
+
++p2p emule
+    =talk out to list of known hosts on port 6346 and 6348
+-USE DROP DOWN FOR MALICIOUS IPS
+vars: dest_ip
+
+
++ldap lockout (aduc)
+vars: 
+
+
++dns exfil
+-ADD DROP DOWN OF PC DOMAINS AND IPS
+elaze.fofreg.net
+cubq.lompd.com
+szepor.aqua.biz
+lauoy.lamirp.gov
+rimex.naoco.mil
+gof.fork.net
+bulc.deirf.com
+yusef.tnirp.gov
+avocent.netduck.edu
+rules.app.net
+hedge.picuz.ru
+ocat.blue.cn
+cybex.xmr.ru
+priual.prong.mil
+fog.zip.cz
+pho.erf.fr
+noita.gnit.md
+xn.node.ir
+slianted.yrotirr.tk
+tarabh.aidni.pw
+cibara.rebotcot.rs
+mano.rataq.ge
+kugnah.nadas.ua
+nar.zaq.cn
+
+
+vars: domain_name
+
+
+
+directive NOTAM:
+info NOTAM:
+    -send from administrator to administrator @uct.jcor
+     with attachment
+    -spoof from inside
+
+
+
+saving preset:
+    NOTAMs
+    malicious email
+    sql injection
+
+
+===================================
+TRAFFIC:
+===================================
+
+range side:
+-smtp in
+
+client side:
+-smtp out
+-www out
+
+
+
+OTHER TODO:
+
+select all/none buttons on injects page
+
+global inject stop on dashboard (in addition to stopping individually)
+global range reboot on dashboard

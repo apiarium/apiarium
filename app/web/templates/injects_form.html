@@ -1,0 +1,309 @@
+
+{#
+IN:
+    inject
+    workstations
+    ips
+    saved
+    
+class Module():
+    def getInjectClass(self):
+    def isRange(self):
+    def isClient(self):
+    def getVars(self):
+    def getName(self):
+    def getHTMLName(self):
+    def getDesc(self):
+
+SPECIAL THINGS:
+
+#}
+
+{% with messages = get_flashed_messages(category_filter=["error"]) %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger">
+        <h4>{{message}}</h4>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">
+        <h4>{{message}}</h4>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=["info"]) %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info">
+        <h4>{{message}}</h4>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">{{inject.getName()}} options</div>
+    <div class="panel-body">
+        <form id="form" enctype="multipart/form-data" method="POST">
+            <input type="hidden" name="inject" value="{{inject.getHTMLName()}}"/>
+            {% if inject.canSave() %}
+                <div class="well">
+                    <div class="form-group">
+                        <label class="control-label" for="loadOption">Load saved:</label>
+                        <select id="loadOption" class="form-control">
+                            {% for s in saved %}
+                                <option value="{{s[0]}}">{{s[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if length(saved) > 0 %}
+                    <script>
+                        $('#loadOption').click(function(e){
+                            var saveID = $(this).val();
+                            $.get('/injects/form/{{inject.getHTMLName()}}?saveID='+saveID,
+                                function(data){
+                                    $.each(data, function(key, value){
+                                        console.log("new item:",key,value);
+                                        console.log($('#'+key));
+                                        if(key.indexOf("_FILE") > 0){
+                                            var swapFunc = window[key+'SwapUpload'];
+                                            swapFunc(value);
+                                        } else {
+                                            $('#'+key).val(value);
+                                        }
+                                    });
+                                },
+                                'json'
+                                );
+                        });
+                    </script>
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="saveName">Save name:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="saveName" id="saveName"/>
+                            <span class="input-group-btn">
+                                <button id="saveButton" class="btn btn-primary" type="button">Save</button>
+                                <script>
+                                $("#saveButton").click(function(e){
+                                    var formData = new FormData($('form')[0]);
+                                        $.ajax({
+                                            url: '/injects/save',  //Server script to process data
+                                            type: 'POST',
+                                            xhr: function() {  // Custom XMLHttpRequest
+                                                var myXhr = $.ajaxSettings.xhr();
+                                                if(myXhr.upload){ // Check if upload property exists
+                                                    //myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                                                }
+                                                return myXhr;
+                                            },
+                                            //Ajax events
+                                            //beforeSend: beforeSendHandler,
+                                            success: function(data){
+                                                    console.log(data);
+                                                    refreshInjectForm();
+                                                },//completeHandler,
+                                            error: function(data){
+                                                    console.log(data);
+                                                    refreshInjectForm();
+                                                },//erroHandler,
+                                            // Form data
+                                            data: formData,
+                                            //Options to tell jQuery not to process data or worry about content-type.
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false
+                                        });
+                                    });
+                                </script>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            {% endif %}
+
+            {% for var,option in inject.getVars() | dictsort %}
+                {% if var == "src_ip" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">Malicious IP:</label>
+                        <select id="{{var}}" name="{{var}}" class="form-control ephor-option">
+                            {% for ip in ips %}
+                                <option value="{{ip}}">{{ip}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                {% elif var == "src_ws" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">Source workstation:</label>
+                        <select id="{{var}}" name="{{var}}" class="form-control ephor-option">
+                            {% for ws,mac in workstations|dictsort %}
+                                <option value="{{ws}}">{{ws}} ({{mac}})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                {% elif str_slice(var,-5) == "_AREA" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
+                        <textarea name="{{var}}" class="form-control ephor-option" id="{{var}}"></textarea>
+                    </div>
+
+                {% elif str_slice(var,-7) == "_OPTION" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
+                        <select name="{{var}}" id="{{var}}" class="form-control ephor-option">
+                            {% for item in option |sort %}
+                                <option value="{{item}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                {% elif str_slice(var,-7) == "_SLIDER" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
+                        <input name="{{var}}" type="number" class="form-control ephor-option" id="{{var}}"/>
+                    </div>
+
+                {% elif str_slice(var,-5) == "_FILE" %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
+                        <input name="{{var}}" id="{{var}}" type="file" class="form-control ephor-option"/>
+
+                        <div class="input-group">
+                            <input name="{{var}}_TEXT" id="{{var}}_TEXT" value="Uploaded from save." type="text" class="hidden form-control ephor-option" disabled="disabled"/>
+                            <input name="{{var}}_HIDDEN" id="{{var}}_HIDDEN" value="" type="hidden" class="hidden form-control ephor-option" disabled="disabled"/>
+                            <span class="input-group-btn">
+                                <button id="{{var}}_RESETBTN" class="btn btn-primary hidden" disabled="disabled" type="button">Upload new document</button>
+                            </span>
+                        </div><!-- /input-group -->
+                        <script>
+                        function {{var}}SwapUpload(value){
+                            finput = $('#{{var}}');
+                            if ( value != null) {
+                                // hide the upload
+                                finput.addClass('hidden');
+                                finput.attr('disabled','disabled');
+                                $("#{{var}}_TEXT").removeClass('hidden');
+                                $("#{{var}}_TEXT").removeAttr('disabled');
+                                $("#{{var}}_HIDDEN").attr('value',value);
+                                $("#{{var}}_HIDDEN").removeClass('hidden');
+                                $("#{{var}}_HIDDEN").removeAttr('disabled');
+                                $("#{{var}}_RESETBTN").removeAttr('disabled');
+                                $("#{{var}}_RESETBTN").removeClass('hidden');
+                            } else if( finput.hasClass('hidden') ) {
+                                // show the upload
+                                finput.removeClass('hidden');
+                                finput.removeAttr('disabled');
+
+                                $("#{{var}}_TEXT").addClass('hidden');
+                                $("#{{var}}_TEXT").attr('disabled','disabled');
+                                $("#{{var}}_HIDDEN").attr('disabled','disabled');
+                                $("#{{var}}_HIDDEN").addClass('hidden');
+                                $("#{{var}}_HIDDEN").removeAttr('value');
+                                
+                                $("#{{var}}_RESETBTN").attr('disabled','disabled');
+                                $("#{{var}}_RESETBTN").addClass('hidden');
+                            }
+
+                        }
+                        $('#{{var}}_RESETBTN').click(function(e){
+                                {{var}}SwapUpload(null);
+                                });
+                        </script>
+
+                    </div>
+
+                {% else %}
+                    <div class="form-group">
+                        <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
+                        <input name="{{var}}" type="text" class="form-control ephor-option" id="{{var}}"/>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+
+            <div class="form-group">
+                <input type="button" id="submitButton" class="form-control btn btn-primary" style="padding=2em" name="Execute" value="Execute"/>
+            </div>
+
+            <center><label><input id="show" type="checkbox" name="show" value="show"/>Show Additional Info</label></center>
+            <div id="advancedInfo" class="hidden">
+                {% if length(inject.getVars()) == 0 %}
+                    <p>There doesn't seem to be any more information.</p>
+                {% endif %}
+                {% for key, item in inject.getVars()|dictsort %}
+                    <p>{{key}} = {{item}}</p>
+                {% endfor %}
+            </div>
+        </form>
+    </div> <!-- end form-group -->
+    </div>
+</div>
+
+<script>
+
+    $("#submitButton").click(function(e){
+        $(this).attr("disabled","disabled");
+
+        // get a list of the range names
+        var checkedRanges = $('.range.active').map(function(a,b){
+            return $(b).attr('href').replace('#','');
+        }).get();
+        $.each(checkedRanges, function(key,range){
+                $('form').append('<input type="hidden" name="ranges" value="'+range+'"/>')
+            });
+
+        var formData = new FormData($('form')[0]);
+        $.ajax({
+            url: '/injects/run',  //Server script to process data
+            type: 'POST',
+            xhr: function() {  // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // Check if upload property exists
+                    //myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                }
+                return myXhr;
+            },
+            //Ajax events
+            //beforeSend: beforeSendHandler,
+            success: function(data){
+                    console.log(data);
+                    refreshInjectForm();
+                },
+
+            error: function(data){
+                    console.log(data);
+                    refreshInjectForm();
+                },
+            // Form data
+            data: formData,
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    $('#show').click(function(e){
+        if( $('#show').is(':checked') ) {
+            $('#advancedInfo').removeClass('hidden').addClass('show');
+        }else{
+            $('#advancedInfo').addClass('hidden').removeClass('show');
+        }
+    });
+
+    
+
+</script>
+
+

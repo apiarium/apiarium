@@ -1,0 +1,45 @@
+; Zone File for cornell.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	dns.cit.cornell.edu.
+		IN	NS	bigred.cit.cornell.edu.
+		IN	NS	cudns.cit.cornell.edu.
+		IN	MX	None cornell.edu
+		IN	MX	None cornell.edu
+		IN	MX	None cornell.edu
+		IN	MX	None cornell.edu
+		IN	MX	None cornell.edu
+		IN	MX	None cornell.edu
+None		IN	A	107.23.48.202
+None		IN	A	54.210.120.54
+None		IN	A	107.23.15.41
+None		IN	A	54.236.194.104
+None		IN	A	23.253.171.29
+None		IN	A	23.253.58.199
+None		IN	A	162.209.95.41
+None		IN	A	66.135.49.220
+None		IN	A	199.19.67.174
+None		IN	A	132.236.204.10
+None		IN	A	128.253.173.242
+None		IN	A	128.253.173.246
+None		IN	A	128.253.173.243
+None		IN	A	128.253.173.241
+None		IN	A	128.253.173.244
+None		IN	A	192.35.82.53
+None		IN	A	128.253.180.35
+None		IN	A	132.236.56.252
+None		IN	CNAME	cornell.catalog.acalog.com.
+None		IN	CNAME	edge.live.getpantheon.com.
+None		IN	CNAME	cornell.localist.com.
+None		IN	CNAME	wwwcornelledu-ssl.cit.cornell.edu.
+None		IN	TXT	"NmwZsJfvHf2DUPwvPqMaLkflPi89l0leQfEkMtPmpxQNqlkPy0anm5LZM/N+sxrW+oJfdGKCyoi/qnhAhPy8yg=="
+None		IN	TXT	"v=spf1 ip4:128.84.13.240/28 include:_spf.qemailserver.com ?all"
+; EOF

@@ -1,0 +1,24 @@
+; Zone File for afrinic.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns2.lacnic.net.
+		IN	NS	tinnie.arin.net.
+		IN	NS	sec3.apnic.net.
+		IN	NS	ns1.afrinic.net.
+		IN	NS	ns2.afrinic.net.
+		IN	NS	sec1.authdns.ripe.net.
+		IN	NS	sec1.apnic.net.
+None		IN	A	196.216.2.6
+None		IN	A	196.216.2.6
+None		IN	A	196.216.2.1
+None		IN	A	196.216.168.10
+None		IN	TXT	"v=spf1 mx a a:mail.afrinic.net a:mail.jnb.afrinic.net a:lists.afrinic.net a:smtp.afrinic.net a:mail.mu.afrinic.net -all"
+; EOF

@@ -1,0 +1,24 @@
+; Zone File for edu.uy
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	tacuabe.rau.edu.uy.
+		IN	NS	seciu.edu.uy.
+		IN	NS	ns2.anteldata.com.uy.
+		IN	NS	sns-pb.isc.org.
+		IN	NS	ns.dns.br.
+		IN	NS	ns3.nic.mx.
+		IN	NS	ns1.anteldata.com.uy.
+		IN	NS	ultra.edu.uy.
+		IN	MX	None seciu.edu.uy
+None		IN	A	164.73.128.5
+None		IN	A	164.73.128.70
+None		IN	A	164.73.128.70
+; EOF

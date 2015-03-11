@@ -1,0 +1,12 @@
+# This will be used to make the client docker app
+FROM ephor
+#CMD \
+    #chmod +x /opt/pipework && \
+    #/opt/pipework --wait && \
+    #python /opt/client.py
+
+ADD . /opt
+ADD ./injects /opt/injects
+
+EXPOSE 23
+CMD (/opt/pipework --wait); (python /opt/client.py)

@@ -1,0 +1,17 @@
+; Zone File for net.za
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns0.is.co.za.
+		IN	NS	za-ns.anycast.pch.net.
+		IN	NS	disa.tenet.ac.za.
+None		IN	A	66.135.62.20
+None		IN	A	206.223.136.200
+; EOF

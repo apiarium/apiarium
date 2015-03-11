@@ -1,0 +1,26 @@
+; Zone File for dfn.de
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns.tu-berlin.de.
+		IN	NS	ws-mue1.win-ip.dfn.de.
+		IN	NS	deneb.dfn.de.
+		IN	NS	ws-kar1.win-ip.dfn.de.
+		IN	NS	ws-fra1.win-ip.dfn.de.
+		IN	MX	None dfn.de
+		IN	MX	None dfn.de
+		IN	MX	None dfn.de
+None		IN	A	193.174.75.178
+None		IN	A	194.95.248.240
+None		IN	A	193.174.75.166
+None		IN	A	192.76.176.9
+None		IN	A	193.174.75.154
+None		IN	A	193.174.75.142
+; EOF

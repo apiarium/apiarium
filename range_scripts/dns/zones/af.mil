@@ -1,0 +1,33 @@
+; Zone File for af.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	langley-ns10.afnoc.af.mil.
+		IN	NS	lackland-ns10.afnoc.af.mil.
+		IN	NS	ramstein-ns10.afnoc.af.mil.
+		IN	NS	beale-ns10.afnoc.af.mil.
+		IN	NS	peterson-ns10.afnoc.af.mil.
+		IN	NS	osan-ns10.afnoc.af.mil.
+None		IN	A	23.67.61.178
+None		IN	A	23.67.61.160
+None		IN	A	23.67.61.169
+None		IN	A	23.67.61.200
+None		IN	A	23.67.61.203
+None		IN	A	23.67.61.176
+None		IN	A	132.3.29.10
+None		IN	A	132.3.45.10
+None		IN	A	132.3.25.10
+None		IN	A	132.3.65.10
+None		IN	A	132.3.57.10
+None		IN	A	132.3.13.10
+None		IN	CNAME	www.af.mil.edgesuite.net.
+None		IN	CNAME	www.keesler.af.mil.edgesuite.net.
+None		IN	CNAME	www.usafa.af.mil.edgesuite.net.
+; EOF

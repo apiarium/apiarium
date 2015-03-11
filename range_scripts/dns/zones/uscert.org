@@ -1,0 +1,21 @@
+; Zone File for uscert.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	pdns02.domaincontrol.com.
+		IN	NS	pdns01.domaincontrol.com.
+		IN	MX	None www.uscert.org
+		IN	MX	None uscert.org
+		IN	MX	None www.uscert.org
+		IN	MX	None uscert.org
+None		IN	A	50.63.202.26
+None		IN	A	50.63.202.26
+None		IN	CNAME	uscert.org.
+; EOF

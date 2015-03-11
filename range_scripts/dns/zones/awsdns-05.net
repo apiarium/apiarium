@@ -1,0 +1,21 @@
+; Zone File for awsdns-05.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-454.awsdns-05.net.
+		IN	NS	g-ns-1925.awsdns-05.net.
+		IN	NS	g-ns-1349.awsdns-05.net.
+		IN	NS	g-ns-775.awsdns-05.net.
+None		IN	A	205.251.194.42
+None		IN	A	205.251.193.198
+None		IN	A	205.251.199.133
+None		IN	A	205.251.197.69
+None		IN	A	205.251.195.7
+; EOF

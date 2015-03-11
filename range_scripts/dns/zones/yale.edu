@@ -1,0 +1,58 @@
+; Zone File for yale.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	serv3.net.yale.edu.
+		IN	NS	serv2.net.yale.edu.
+		IN	NS	serv1.net.yale.edu.
+		IN	NS	serv4.net.yale.edu.
+		IN	MX	None yale.edu
+		IN	MX	None yale.edu
+		IN	MX	None yale.edu
+		IN	MX	None yale.edu
+		IN	MX	None yale.edu
+None		IN	A	70.32.107.64
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.232.153
+None		IN	A	130.132.35.39
+None		IN	A	23.92.16.4
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.39
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.102
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.53
+None		IN	A	130.132.35.120
+None		IN	A	130.132.35.53
+None		IN	A	130.132.1.11
+None		IN	A	130.132.1.10
+None		IN	A	130.132.1.9
+None		IN	A	130.132.89.9
+None		IN	CNAME	vip-d7prd-01.its.yale.edu.
+None		IN	CNAME	mire.med.yale.edu.
+None		IN	CNAME	vip-dplprd-01.its.yale.edu.
+None		IN	CNAME	vip-d7prd-01.its.yale.edu.
+None		IN	CNAME	vip-vanity-01.its.yale.edu.
+None		IN	CNAME	vip-wwwprd-01.its.yale.edu.
+None		IN	CNAME	vip-d7prd-01.its.yale.edu.
+None		IN	TXT	"MS=ms71696546"
+None		IN	TXT	"google-site-verification=wLNdYe7PcFN1GTfpDeWAT-aPFTWpa_fMn7ZWDw07cuc"
+None		IN	TXT	"v=spf1 ip4:130.132.50.0/24 ip4:130.132.232.0/24 include:_spf.google.com ?all"
+None		IN	TXT	"KVATau69gzhqUOgCyXmfd9cSFFIarSmLDzRIuuICLnF8FgBUcmhtEuWIfd8/R4wkQJh9vIfvF0GJ/s3/S2RBHQ=="
+; EOF

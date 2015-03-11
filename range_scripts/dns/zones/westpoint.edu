@@ -1,0 +1,21 @@
+; Zone File for westpoint.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns01.army.mil.
+		IN	NS	ns03.army.mil.
+		IN	NS	ns02.army.mil.
+		IN	MX	None westpoint.edu
+		IN	MX	None westpoint.edu
+		IN	MX	None westpoint.edu
+None		IN	A	143.69.2.10
+None		IN	A	143.69.2.10
+None		IN	CNAME	www.usma.edu.
+; EOF

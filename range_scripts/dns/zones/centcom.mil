@@ -1,0 +1,36 @@
+; Zone File for centcom.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns4.centcom.mil.
+		IN	NS	hqnxdn01.centcom.mil.
+		IN	NS	hqnxdn02.centcom.mil.
+		IN	NS	ns5.centcom.mil.
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+		IN	MX	None centcom.mil
+None		IN	A	23.67.61.186
+None		IN	A	23.67.61.162
+None		IN	A	143.69.249.40
+None		IN	A	143.69.241.40
+None		IN	A	214.27.97.51
+None		IN	A	214.26.69.26
+None		IN	A	214.26.69.27
+None		IN	A	214.27.97.52
+None		IN	CNAME	www.centcom.mil.edgesuite.net.
+; EOF

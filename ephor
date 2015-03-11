@@ -1,0 +1,61 @@
+#!/usr/bin/python
+import os
+import sys
+import ConfigParser
+import app
+
+
+""" """
+## @package ephor
+# Simple launcher script.
+# 
+
+## Prints out a message on how to use ephor and exits. 
+#
+def usage():
+    print("Usage:\n\t%s option" % (sys.argv[0]))
+    print("Where 'option' is one of the following:")
+    print("\tweb: run the webserver")
+    print("\trange: run the range")
+    print("\tclean: remove any docker instances")
+    print("\tupdate_docker: update the docker container to include changes, if any, to the injects (NOTE: this must be done if you change the code to any inject)")
+    print("\tmake_docker: initialize the docker instances. This should be one once on initial install.")
+    sys.exit(1)
+
+
+def main():
+    if len(sys.argv) == 1:
+        usage()
+
+    conf = ConfigParser.RawConfigParser()
+    conf.read('ephor.conf')
+    args = conf._sections['ephor']
+
+    if sys.argv[1] == 'web':
+        app.web.web.run(args)
+    elif sys.argv[1] == 'range':
+        app.range.range.run(args)
+    elif sys.argv[1] == 'clean':
+        app.range.docker.clean()
+    elif sys.argv[1] == 'make_docker':
+        import urllib2
+        try:
+            response=urllib2.urlopen('http://74.125.228.100',timeout=1)
+        except urllib2.URLError as err:
+            print("Error! You need internet connectivity.")
+            return
+        os.chdir('./app/range/client/')
+        os.system("mv Dockerfile.make Dockerfile")
+        os.system("docker.io build -t ephor .")
+        os.system("mv Dockerfile Dockerfile.make")
+        print("NOTE: if it failed due to not being able to resolve docker.io, please restart docker by running 'service docker.io restart'.")
+    elif sys.argv[1] == 'update_docker':
+        os.chdir('./app/range/client/')
+        os.system("mv Dockerfile.update Dockerfile")
+        os.system("docker.io build -t ephor .")
+        os.system("mv Dockerfile Dockerfile.update")
+    else:
+        usage()
+
+if __name__ == '__main__':
+    main()

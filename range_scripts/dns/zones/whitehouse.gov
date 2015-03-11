@@ -1,0 +1,32 @@
+; Zone File for whitehouse.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	usw5.akam.net.
+		IN	NS	ns1-176.akam.net.
+		IN	NS	zc.akam.net.
+		IN	NS	usw1.akam.net.
+		IN	NS	usw6.akam.net.
+		IN	NS	ns1-145.akam.net.
+		IN	NS	use6.akam.net.
+		IN	NS	asia9.akam.net.
+		IN	MX	None whitehouse.gov
+		IN	MX	None whitehouse.gov
+		IN	MX	None whitehouse.gov
+		IN	MX	None whitehouse.gov
+		IN	MX	None whitehouse.gov
+		IN	MX	None whitehouse.gov
+None		IN	A	204.95.24.168
+None		IN	A	204.95.24.105
+None		IN	A	23.6.129.55
+None		IN	CNAME	www.whitehouse.gov.edgesuite.net.
+None		IN	TXT	"v=spf1 +mx ~all"
+None		IN	TXT	"google-site-verification=-JwbHEICaAjxSBvyk24PmeRbAMxlwkMNBbMgezzFZfc"
+; EOF

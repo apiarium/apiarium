@@ -1,0 +1,25 @@
+; Zone File for lbl.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	nsd.lbl.gov.
+		IN	NS	ns-lvk.es.net.
+		IN	NS	ns-aoa.es.net.
+		IN	NS	ns1.es.net.
+		IN	NS	nsx.lbl.gov.
+		IN	MX	None nsx.lbl.gov
+		IN	MX	None nsx.lbl.gov
+		IN	MX	None lbl.gov
+		IN	MX	None lbl.gov
+		IN	MX	None lbl.gov
+None		IN	A	131.243.64.3
+None		IN	A	128.3.41.146
+None		IN	A	198.129.89.64
+; EOF

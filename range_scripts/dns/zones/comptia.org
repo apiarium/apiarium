@@ -1,0 +1,22 @@
+; Zone File for comptia.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	charger.comptia.net.
+		IN	NS	ns2.comptia.org.
+		IN	NS	ns1.comptia.org.
+		IN	MX	None comptia.org
+None		IN	A	198.134.5.6
+None		IN	A	198.134.5.6
+None		IN	A	68.70.162.201
+None		IN	A	209.117.62.56
+None		IN	TXT	"MS=ms77029986"
+None		IN	TXT	"v=spf1 a mx mx:comptia-org.mail.protection.outlook.com ip4:198.134.5.0/24 ip4:68.70.162.0/24 ip4:69.7.198.0/24 include:mktomail.com include:spf.protection.outlook.com ~all"
+; EOF

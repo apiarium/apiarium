@@ -1,0 +1,30 @@
+; Zone File for c-span.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns-1365.awsdns-42.org.
+		IN	NS	ns-939.awsdns-53.net.
+		IN	NS	ns-1707.awsdns-21.co.uk.
+		IN	NS	ns-126.awsdns-15.com.
+		IN	NS	ns67.worldnic.com.
+		IN	NS	ns68.worldnic.com.
+		IN	MX	None c-span.org
+None		IN	A	54.230.205.69
+None		IN	A	54.230.206.72
+None		IN	A	54.239.172.150
+None		IN	A	54.230.206.56
+None		IN	A	54.230.206.35
+None		IN	A	54.239.172.151
+None		IN	A	54.230.204.217
+None		IN	A	54.230.205.209
+None		IN	A	38.105.88.215
+None		IN	CNAME	d1k4tx2zn4xs2l.cloudfront.net.
+None		IN	TXT	"google-site-verification=VipyZSm_BoS60QLS-_qIHdnFBUjWOzw66vB5oo8-4aE"
+; EOF

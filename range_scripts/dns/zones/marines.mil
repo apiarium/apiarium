@@ -1,0 +1,21 @@
+; Zone File for marines.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	delta.usmc.mil.
+		IN	NS	usmcdns1a.usmc.mil.
+		IN	NS	alpha.usmc.mil.
+		IN	NS	usmcdns1.usmc.mil.
+		IN	NS	bravo.usmc.mil.
+		IN	NS	charlie.usmc.mil.
+None		IN	A	23.67.61.162
+None		IN	A	23.67.61.168
+None		IN	CNAME	www.mcpw.marines.mil.edgesuite.net.
+; EOF

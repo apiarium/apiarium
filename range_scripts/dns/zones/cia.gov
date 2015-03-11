@@ -1,0 +1,26 @@
+; Zone File for cia.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	a1-22.akam.net.
+		IN	NS	a3-64.akam.net.
+		IN	NS	a16-67.akam.net.
+		IN	NS	a13-65.akam.net.
+		IN	NS	a12-65.akam.net.
+		IN	NS	a22-66.akam.net.
+		IN	MX	None cia.gov
+		IN	MX	None cia.gov
+None		IN	A	23.34.19.36
+None		IN	A	23.34.19.36
+None		IN	A	23.196.99.36
+None		IN	CNAME	www.cia.gov.edgekey.net.
+None		IN	CNAME	www.cia.gov.edgekey.net.
+None		IN	TXT	"v=spf1 mx a:mail1a.cia.gov a:mail1b.cia.gov a:mail2a.cia.gov a:mail2b.cia.gov mx:cia.gov mx:ucia.gov ~all"
+; EOF

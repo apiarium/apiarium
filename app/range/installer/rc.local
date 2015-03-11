@@ -1,0 +1,53 @@
+#!/bin/sh 
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#rsr - 13 Jan 2014 - add additional routes
+for interface_file in $(ls /etc/network-scripts/ifcfg-eth*) ;do
+  . ${interface_file}
+  prefix=${CIDR}
+  tnum=$(echo ${DEVICE} | sed 's/eth//g')
+  tablenum=$((${tnum}+1)) 
+  echo "Configuring ${DEVICE} from ${interface_file}"
+  if [ ${ONBOOT} != 'yes' ] ;then
+    continue
+  fi
+  if ! grep "^${tablenum} ${DEVICE}$" /etc/iproute2/rt_tables >/dev/null ; then
+    echo "    adding table ${tablenum} ${DEVICE} to /etc/iproute2/rt_tables"
+    echo "${tablenum} ${DEVICE}" >>/etc/iproute2/rt_tables
+  fi
+  echo "    adding route ${NETWORK}/${prefix} dev ${DEVICE} src ${IPADDR} table ${DEVICE} metric ${METRIC}"
+  ip route add ${NETWORK}/${prefix} dev ${DEVICE} src ${IPADDR} table ${DEVICE} metric ${METRIC}
+  echo "    adding default via ${ROUTER} dev ${DEVICE} table ${DEVICE}"
+  ip route add default via ${ROUTER} dev ${DEVICE} table ${DEVICE}
+  echo "    adding rule from ${NETWORK}/${CIDR} table ${DEVICE}"
+  ip rule add from ${NETWORK}/${CIDR} table ${DEVICE}
+  echo "    adding rule to ${NETWORK}/${CIDR} table ${DEVICE}"
+  ip rule add to ${NETWORK}/${CIDR} table ${DEVICE}
+done
+
+#rsr - 14 Jan 14 - setup iptables
+/bin/sh /etc/network-scripts/setiptables.sh
+
+#rsr - 16 Jan 14 - add routes for the internet minus 192/8
+/bin/sh /etc/network-scripts/routetheinternet.sh
+
+#rsr - 15 Jan 14 - start range on boot
+python /home/uct-admin/ephor/range/range.py 2>&1 > /var/log/ephor.log &
+
+#create IPs for fake DNS server
+/bin/sh /etc/network-scripts/fakedns.sh
+
+#start dns server
+service bind9 start
+
+exit 0

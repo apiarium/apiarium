@@ -1,0 +1,24 @@
+; Zone File for dsireusa.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.ral.hostedsolutions.com.
+		IN	NS	ns1.clt.hostedsolutions.com.
+		IN	NS	ns1.lit.hostedsolutions.com.
+		IN	NS	ns1.bos.hostedsolutions.com.
+		IN	MX	None dsireusa.org
+		IN	MX	None dsireusa.org
+		IN	MX	None dsireusa.org
+		IN	MX	None dsireusa.org
+		IN	MX	None dsireusa.org
+None		IN	A	216.27.90.46
+None		IN	A	216.27.90.46
+None		IN	TXT	"v=spf1 include:_spf.google.com ~all"
+; EOF

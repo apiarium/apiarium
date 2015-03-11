@@ -1,0 +1,21 @@
+; Zone File for awsdns-19.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-789.awsdns-19.net.
+		IN	NS	g-ns-468.awsdns-19.net.
+		IN	NS	g-ns-1939.awsdns-19.net.
+		IN	NS	g-ns-1363.awsdns-19.net.
+None		IN	A	205.251.194.153
+None		IN	A	205.251.195.21
+None		IN	A	205.251.193.212
+None		IN	A	205.251.199.147
+None		IN	A	205.251.197.83
+; EOF

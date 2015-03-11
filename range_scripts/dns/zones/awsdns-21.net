@@ -1,0 +1,21 @@
+; Zone File for awsdns-21.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1365.awsdns-21.net.
+		IN	NS	g-ns-470.awsdns-21.net.
+		IN	NS	g-ns-1941.awsdns-21.net.
+		IN	NS	g-ns-791.awsdns-21.net.
+None		IN	A	205.251.194.172
+None		IN	A	205.251.197.85
+None		IN	A	205.251.193.214
+None		IN	A	205.251.199.149
+None		IN	A	205.251.195.23
+; EOF

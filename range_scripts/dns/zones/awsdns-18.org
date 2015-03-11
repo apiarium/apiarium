@@ -1,0 +1,21 @@
+; Zone File for awsdns-18.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1618.awsdns-18.org.
+		IN	NS	g-ns-146.awsdns-18.org.
+		IN	NS	g-ns-724.awsdns-18.org.
+		IN	NS	g-ns-1045.awsdns-18.org.
+None		IN	A	205.251.196.150
+None		IN	A	205.251.198.82
+None		IN	A	205.251.192.146
+None		IN	A	205.251.194.212
+None		IN	A	205.251.196.21
+; EOF

@@ -1,0 +1,24 @@
+; Zone File for socom.mil
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns11.socom.mil.
+		IN	NS	ns20.socom.mil.
+		IN	NS	ns21.socom.mil.
+		IN	MX	None socom.mil
+		IN	MX	None socom.mil
+		IN	MX	None socom.mil
+		IN	MX	None socom.mil
+		IN	MX	None socom.mil
+None		IN	A	209.22.230.5
+None		IN	A	209.22.221.52
+None		IN	A	209.22.227.59
+None		IN	A	209.22.227.52
+; EOF

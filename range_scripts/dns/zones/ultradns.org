@@ -1,0 +1,25 @@
+; Zone File for ultradns.org
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	pdns196.ultradns.com.
+		IN	NS	pdns196.ultradns.org.
+		IN	NS	pdns196.ultradns.co.uk.
+		IN	NS	pdns196.ultradns.info.
+		IN	NS	pdns196.ultradns.net.
+		IN	NS	pdns196.ultradns.biz.
+		IN	MX	None ultradns.org
+		IN	MX	None ultradns.org
+None		IN	A	199.7.69.1
+None		IN	A	199.7.68.1
+None		IN	A	156.154.67.89
+None		IN	A	156.154.42.226
+None		IN	A	156.154.67.196
+; EOF

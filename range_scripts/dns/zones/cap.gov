@@ -1,0 +1,33 @@
+; Zone File for cap.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns6.cap.gov.
+		IN	NS	ns7.cap.gov.
+		IN	NS	ns42.cap.gov.
+		IN	NS	ns5.cap.gov.
+		IN	NS	ns41.cap.gov.
+		IN	NS	ns43.cap.gov.
+		IN	MX	None cap.gov
+		IN	MX	None cap.gov
+		IN	MX	None cap.gov
+		IN	MX	None cap.gov
+		IN	MX	None cap.gov
+None		IN	A	199.167.30.32
+None		IN	A	199.167.30.32
+None		IN	A	204.197.214.3
+None		IN	A	76.73.18.238
+None		IN	A	65.49.37.203
+None		IN	A	108.166.170.104
+None		IN	A	64.62.200.147
+None		IN	A	50.7.229.6
+None		IN	TXT	"Security Issues Contact: 877-227-9142 X290"
+None		IN	TXT	"v=spf1 include:_spf.google.com ~all"
+; EOF

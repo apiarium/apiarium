@@ -1,0 +1,24 @@
+; Zone File for pppl.gov
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	ns1.es.net.
+		IN	NS	ns-aoa.es.net.
+		IN	NS	xdns.pppl.gov.
+		IN	NS	ns-lvk.es.net.
+		IN	MX	None pppl.gov
+		IN	MX	None pppl.gov
+None		IN	A	128.112.128.11
+None		IN	A	198.125.224.168
+None		IN	A	198.125.224.167
+None		IN	A	198.125.224.166
+None		IN	A	192.188.106.232
+None		IN	CNAME	pppl.princeton.edu.
+; EOF

@@ -1,0 +1,34 @@
+; Zone File for princeton.edu
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	udns1.ultradns.net.
+		IN	NS	udns2.ultradns.net.
+		IN	NS	dikahble.princeton.edu.
+		IN	NS	ns2.fast.net.
+		IN	NS	ns1.fast.net.
+		IN	NS	adns1.ucsc.edu.
+		IN	NS	adns2.ucsc.edu.
+		IN	NS	dns.princeton.edu.
+		IN	MX	None princeton.edu
+		IN	MX	None princeton.edu
+		IN	MX	None princeton.edu
+		IN	MX	None princeton.edu
+None		IN	A	128.112.129.147
+None		IN	A	128.112.132.86
+None		IN	A	128.112.128.81
+None		IN	A	128.112.134.4
+None		IN	A	128.112.129.15
+None		IN	CNAME	ohd200w.princeton.edu.
+None		IN	TXT	"MS=ms98806852"
+None		IN	TXT	"google-site-verification=9SPyuHTDpGLTj4BA6qoL87mlLTsvqWTWPFPJCKHXUAA"
+None		IN	TXT	"v=spf1 ip4:128.112.128.212 ip4:128.112.128.213 ip4:128.112.128.214 ip4:128.112.128.215 ip4:128.112.128.216 ip4:128.112.130.131 ip4:128.112.134.60 ip4:128.112.130.204 ip4:128.112.128.68 mx ?all"
+None		IN	TXT	"KWAAcU+GO+erbuI7ikfpG6uDfqlpRKz9e2PXxeaFJPlnmhnkYjnFG0uoKVAMi2F8Iz7QeT4dR+J8OU3/k7LZ0A=="
+; EOF

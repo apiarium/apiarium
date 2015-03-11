@@ -1,0 +1,21 @@
+; Zone File for awsdns-29.net
+; Generated Wed Mar 11 14:36:06 2015
+$TTL 172800
+$ORIGIN None
+@		IN	SOA	  (
+			  3h
+			  3h
+			  15m
+			  1w
+			  1d
+			  )
+		IN	NS	g-ns-1949.awsdns-29.net.
+		IN	NS	g-ns-478.awsdns-29.net.
+		IN	NS	g-ns-1373.awsdns-29.net.
+		IN	NS	g-ns-799.awsdns-29.net.
+None		IN	A	205.251.194.234
+None		IN	A	205.251.199.157
+None		IN	A	205.251.193.222
+None		IN	A	205.251.197.93
+None		IN	A	205.251.195.31
+; EOF
