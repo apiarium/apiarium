@@ -552,7 +552,7 @@ class WebC2Connection():
 ## Start the local socket to accept from the WebC2 server.
 #  This reads the configuration file, and sets variables accordingly.
 #  When a WebC2 connects, it will send an object instructing the RangeC2 how to behave and which network to operate on.
-#  @param args taken from ephor.conf
+#  @param args taken from apiarium.conf
 def run(args):
 
     euid = os.geteuid()
@@ -567,8 +567,8 @@ def run(args):
     global CORE_SW_INT
     global INET_INT
 
-    CORE_SW_INT = args['range_ephor_core_sw_interface']
-    INET_INT = args['range_ephor_inet_interface']
+    CORE_SW_INT = args['range_apiarium_core_sw_interface']
+    INET_INT = args['range_apiarium_inet_interface']
 
 
     # Change directory to this file's path.

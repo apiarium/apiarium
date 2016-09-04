@@ -29,7 +29,7 @@ workstations = []
 DEBUG = False
 ## @var LOGFILE
 #  Specifies the location of the logfile.
-#  default value is /var/log/ephor.log
+#  default value is /var/log/apiarium.log
 #  SHOULD BE DEFINED IN CONFIG FILE
 LOGFILE = None
 
@@ -130,7 +130,7 @@ def debug(string, color="default"):
         print(option[color].format(string))
     else:
         if LOGFILE == None:
-            LOGFILE = open('/var/log/ephor.log','a')
+            LOGFILE = open('/var/log/apiarium.log','a')
         LOGFILE.write(str(datetime.datetime.now()))
         LOGFILE.write(': ')
         LOGFILE.write(string)

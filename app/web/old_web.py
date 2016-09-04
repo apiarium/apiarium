@@ -144,8 +144,8 @@ def loadWebC2Config(conf):
         cc2.rangeName = names[i]
         cc2.c2ExternalIP = ips[i]
         cc2.c2ExternalPort = 9013
-        cc2.c2Interface = conf['range_ephor_inet_interface']
-        cc2.clientInterface = conf['range_ephor_core_sw_interface']
+        cc2.c2Interface = conf['range_apiarium_inet_interface']
+        cc2.clientInterface = conf['range_apiarium_core_sw_interface']
         cc2.c2IPPool = Payload_IP_Ranges
         c2Servers.append(cc2)
 
@@ -609,7 +609,7 @@ class WWWServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def do_AUTHHEAD(self):
         self.send_response(401)
-        self.send_header('WWW-Authenticate', 'Basic realm="Ephor C2"')
+        self.send_header('WWW-Authenticate', 'Basic realm="apiarium C2"')
         self.send_header('Content-type', 'text/html')
         self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.send_header("Pragma", "no-cache")

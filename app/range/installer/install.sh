@@ -25,8 +25,8 @@ chmod +x /etc/network-scripts/fakedns.sh
 IP=$(ip a | sed -e '/inet.*eth0/!d;s/.*inet //;s/\/.*//')
 
 echo [range] > range.conf
-echo ephor_server_range_ip=$IP >> range.conf
-echo ephor_server_range_port=9000 >> range.conf
+echo apiarium_server_range_ip=$IP >> range.conf
+echo apiarium_server_range_port=9000 >> range.conf
 echo internal_port_for_clients=9001 >> range.conf
 
 cp $DIR/range.conf $DIR/../range.conf

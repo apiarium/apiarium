@@ -7,7 +7,7 @@ iptables -P INPUT ACCEPT
 iptables -P FORWARD DROP
 iptables -P OUTPUT ACCEPT
 
-#Allow any-any between ephor management ips
+#Allow any-any between apiarium management ips
 iptables -A OUTPUT -p all -d 192.168.64.64 -j ACCEPT
 iptables -A OUTPUT -p all -d 192.168.64.65 -j ACCEPT
 iptables -A OUTPUT -p all -d 192.168.64.66 -j ACCEPT

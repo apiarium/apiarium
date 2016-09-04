@@ -1,5 +1,5 @@
 # This will be used to make the client docker app
-FROM ephor
+FROM apiarium
 #CMD \
     #chmod +x /opt/pipework && \
     #/opt/pipework --wait && \

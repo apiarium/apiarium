@@ -6,11 +6,11 @@ import app
 
 
 """ """
-## @package ephor
+## @package apiarium
 # Simple launcher script.
 # 
 
-## Prints out a message on how to use ephor and exits. 
+## Prints out a message on how to use apiarium and exits. 
 #
 def usage():
     print("Usage:\n\t%s option" % (sys.argv[0]))
@@ -28,8 +28,8 @@ def main():
         usage()
 
     conf = ConfigParser.RawConfigParser()
-    conf.read('ephor.conf')
-    args = conf._sections['ephor']
+    conf.read('apiarium.conf')
+    args = conf._sections['apiarium']
 
     if sys.argv[1] == 'web':
         app.web.web.run(args)
@@ -46,13 +46,13 @@ def main():
             return
         os.chdir('./app/range/client/')
         os.system("mv Dockerfile.make Dockerfile")
-        os.system("docker.io build -t ephor .")
+        os.system("docker.io build -t apiarium .")
         os.system("mv Dockerfile Dockerfile.make")
         print("NOTE: if it failed due to not being able to resolve docker.io, please restart docker by running 'service docker.io restart'.")
     elif sys.argv[1] == 'update_docker':
         os.chdir('./app/range/client/')
         os.system("mv Dockerfile.update Dockerfile")
-        os.system("docker.io build -t ephor .")
+        os.system("docker.io build -t apiarium .")
         os.system("mv Dockerfile Dockerfile.update")
     else:
         usage()

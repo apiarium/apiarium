@@ -146,7 +146,7 @@ def check_auth(username, password):
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
-    'Ephor', 401,
+    'apiarium', 401,
     {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 def nocache(f):

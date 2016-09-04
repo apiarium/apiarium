@@ -42,7 +42,7 @@ done
 /bin/sh /etc/network-scripts/routetheinternet.sh
 
 #rsr - 15 Jan 14 - start range on boot
-python /home/uct-admin/ephor/range/range.py 2>&1 > /var/log/ephor.log &
+python /home/uct-admin/apiarium/range/range.py 2>&1 > /var/log/apiarium.log &
 
 #create IPs for fake DNS server
 /bin/sh /etc/network-scripts/fakedns.sh

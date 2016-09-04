@@ -135,7 +135,7 @@ SPECIAL THINGS:
                 {% if var == "src_ip" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">Malicious IP:</label>
-                        <select id="{{var}}" name="{{var}}" class="form-control ephor-option">
+                        <select id="{{var}}" name="{{var}}" class="form-control apiarium-option">
                             {% for ip in ips %}
                                 <option value="{{ip}}">{{ip}}</option>
                             {% endfor %}
@@ -145,7 +145,7 @@ SPECIAL THINGS:
                 {% elif var == "src_ws" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">Source workstation:</label>
-                        <select id="{{var}}" name="{{var}}" class="form-control ephor-option">
+                        <select id="{{var}}" name="{{var}}" class="form-control apiarium-option">
                             {% for ws,mac in workstations|dictsort %}
                                 <option value="{{ws}}">{{ws}} ({{mac}})</option>
                             {% endfor %}
@@ -155,13 +155,13 @@ SPECIAL THINGS:
                 {% elif str_slice(var,-5) == "_AREA" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
-                        <textarea name="{{var}}" class="form-control ephor-option" id="{{var}}"></textarea>
+                        <textarea name="{{var}}" class="form-control apiarium-option" id="{{var}}"></textarea>
                     </div>
 
                 {% elif str_slice(var,-7) == "_OPTION" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
-                        <select name="{{var}}" id="{{var}}" class="form-control ephor-option">
+                        <select name="{{var}}" id="{{var}}" class="form-control apiarium-option">
                             {% for item in option |sort %}
                                 <option value="{{item}}">{{item}}</option>
                             {% endfor %}
@@ -171,17 +171,17 @@ SPECIAL THINGS:
                 {% elif str_slice(var,-7) == "_SLIDER" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
-                        <input name="{{var}}" type="number" class="form-control ephor-option" id="{{var}}"/>
+                        <input name="{{var}}" type="number" class="form-control apiarium-option" id="{{var}}"/>
                     </div>
 
                 {% elif str_slice(var,-5) == "_FILE" %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
-                        <input name="{{var}}" id="{{var}}" type="file" class="form-control ephor-option"/>
+                        <input name="{{var}}" id="{{var}}" type="file" class="form-control apiarium-option"/>
 
                         <div class="input-group">
-                            <input name="{{var}}_TEXT" id="{{var}}_TEXT" value="Uploaded from save." type="text" class="hidden form-control ephor-option" disabled="disabled"/>
-                            <input name="{{var}}_HIDDEN" id="{{var}}_HIDDEN" value="" type="hidden" class="hidden form-control ephor-option" disabled="disabled"/>
+                            <input name="{{var}}_TEXT" id="{{var}}_TEXT" value="Uploaded from save." type="text" class="hidden form-control apiarium-option" disabled="disabled"/>
+                            <input name="{{var}}_HIDDEN" id="{{var}}_HIDDEN" value="" type="hidden" class="hidden form-control apiarium-option" disabled="disabled"/>
                             <span class="input-group-btn">
                                 <button id="{{var}}_RESETBTN" class="btn btn-primary hidden" disabled="disabled" type="button">Upload new document</button>
                             </span>
@@ -226,7 +226,7 @@ SPECIAL THINGS:
                 {% else %}
                     <div class="form-group">
                         <label class="control-label" for="{{var}}">{{str_fancy(var)}}:</label>
-                        <input name="{{var}}" type="text" class="form-control ephor-option" id="{{var}}"/>
+                        <input name="{{var}}" type="text" class="form-control apiarium-option" id="{{var}}"/>
                     </div>
 
                 {% endif %}

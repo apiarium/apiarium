@@ -106,7 +106,7 @@ class TimeoutException(Exception):
 
 class Docker(object):
 
-    def __init__(self, bridge_eth, image='ephor', num_clients=0, kill_old=True):
+    def __init__(self, bridge_eth, image='apiarium', num_clients=0, kill_old=True):
         """
         bridge_eth = the interface on which to put the docker instances
         image = the name of the image that will be controlled/modified by this
@@ -126,14 +126,14 @@ class Docker(object):
         
         # set up the docker image if it hasn't been done
         setup = False
-        images = subprocess.check_output(['docker', 'images', 'ephor'])
+        images = subprocess.check_output(['docker', 'images', 'apiarium'])
         for line in images.split('\n')[1:]:
-            if line.startswith('ephor'):
+            if line.startswith('apiarium'):
                 setup = True
                 break
         if not setup:
-            print("Initializing ephor docker image...")
-            subprocess.call(['docker', 'build', '--no-cache', '-t', 'ephor',
+            print("Initializing apiarium docker image...")
+            subprocess.call(['docker', 'build', '--no-cache', '-t', 'apiarium',
                             os.path.join(SCRIPT_DIR, 'client', '.')])
 
         # ensure udhcpc is installed
@@ -258,7 +258,7 @@ class Docker(object):
                 raise Exception(
                     'Could not start docker instance. Error with docker run.')
 
-        # pipework <interface> $(docker run -d ephor) dhcp <hostname> <mac>
+        # pipework <interface> $(docker run -d apiarium) dhcp <hostname> <mac>
         pipework_cmd = '{} {} {} dhcp {} {}'.format(
             pipework_path,
             self.eth,
